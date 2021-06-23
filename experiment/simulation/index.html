@@ -1,12 +1,74 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
+<html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="vendors/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet"/>
+    <style type="text/css">
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            //the function is called once the document loads     
+
+            $('#hidden-content').load('default.html #experiment',
+                function(response, status, xhr) {
+                    $('#container').load('content.html #experiment',
+                        function(response, status, xhr) {
+                            homePage = $("div#experiment-header-heading a").html();
+                            thisPage = $("article#experiment-article header#experiment-article-heading").html();
+                            breadcrumb = "<font color='white'>" + "<a href='../../index.html'>Home<a/> \> <a href='../index.html'>" + homePage + "</a> \> <a href='index.html'>" + thisPage + "</a>" + "</font>";
+                            $("article#experiment-article div#experiment-article-breadcrumb").html(breadcrumb);
+                            $("#container .default").each(function() {
+                                sectionId = $(this).attr('id');
+                                sectionContent = $("#hidden-content #" +
+                                    sectionId).html();
+                                $("#container #" + sectionId).html(sectionContent);
+                            });
+
+                            $("#container #experiment-article-sections > section").each(function() {
+                                sectionId = $(this).attr('id');
+                                headerId = $("#" + sectionId + "-heading").html();
+                                iconId = $("#" + sectionId + "-icon").html();
+
+                                $("#container #experiment-article-navigation ul").
+                                append("<li> <a href=\'#\' id=\'" + sectionId +
+                                    "-menu\'>" + iconId + "<br />" +
+                                    headerId + "</a></li>");
+                            });
+                            $("#experiment-article-sections section").hide();
+                            $("#experiment-article-sections section:first").show();
+                            $("#experiment-article-navigation ul > li a").live('click',
+                                function() {
+                                    menuId = $(this).attr('id');
+                                    sectionId = menuId.replace(/-menu/i, "");
+                                    $("#experiment-article-sections section").hide();
+                                    $("#experiment-article-sections #" + sectionId).show();
+                                });
+                        });
+                });
+        });
+    </script>
+
 </head>
-<body>
-		<!-- Your code goes here-->
- <table width="100%">
+
+<body class="index" id="page-top">
+                    <div class="col-md-10 lab-list-col-10">
+
+                        <!--edit -->
+                        <h1 class="text-h1-lightblue">Word Generation</h1>
+                        <div class="content" id="experiment-article-section-4-content">
+                            <table width="100%">
                                 <tbody>
                                     <tr>
                                         <td align="center">
@@ -19,7 +81,83 @@
                                     </tr>
                                 </tbody>
                             </table>
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
-</body>
-</html>
+                        </div>
+                        <br/>
+                        <div align="center" id="fldiv"></div>
+                        <br/>
+                        <div align="center" id="option"></div>
+                    </div>
+                </div>
+            </div>
+    <script src="js/jquery.js"></script>
+
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/custom.js"></script>
+
+    <script src="vendors/owl-carousel/owl.carousel.js"></script>
+
+    <script type="text/javascript">
+        var index;
+
+        function getdata(lang, scr) {
+            $('#fldiv').load('exp2.php?root=%&category=%&gender=%&form=%&person=%&tense=%&reference=%&lang=' + lang + '&scr=' + scr);
+        }
+
+        function getOption(temp) {
+            temp1 = temp.split("_");
+            lang = temp1[0];
+            scr = temp1[1];
+            document.getElementById("option").innerHTML = "";
+            document.getElementById("fldiv").innerHTML = "";
+            if (scr == "null") {
+                alert("Select language");
+                return;
+            }
+            getdata(lang, scr);
+        }
+
+        function getAnswer(word) {
+            document.getElementById("get_hide").innerHTML = "<button onclick=\"hideAnswer('" + word + "');\">Hide Answer</button> <br><br><p style='font-size:20px' > <b>Answer</b>: " + word + "</p>";
+        }
+
+        function hideAnswer(word) {
+            document.getElementById("get_hide").innerHTML = "<button onclick=\"getAnswer('" + word + "');\">Get Answer</button>";
+        }
+
+        $(document).ready(function() {
+
+            var owl = $("#owl-demo");
+            owl.owlCarousel({
+                navigation: true,
+                navigationText: [
+                    "<img src='../images/left-arrow.png'>",
+                    "<img src='../images/right-arrow.png'>"
+                ],
+                /* autoPlay : 3000,
+                stopOnHover : true */
+            });
+
+            //owl for partner institutions
+            var owl = $("#owl-partner-institutions");
+            owl.owlCarousel({
+                navigation: true,
+                navigationText: [
+                    "<img src='../images/left-arrow.png'>",
+                    "<img src='../images/right-arrow.png'>"
+                ],
+                autoPlay: 3000,
+                stopOnHover: true,
+                items: 8,
+            });
+
+            //owl for aboutus
+            var owl = $("#owl-aboutus");
+            owl.owlCarousel({
+                navigation: true,
+                singleItem: true
+            });
+
+        });
+    </script>
+</body><!-- jQuery --></html>
