@@ -2,6 +2,4 @@ A word can be simple or complex. For example, the word 'cat' is simple because o
 
 <img align="center" src="images/morph1.gif">
 
-#### Objective
-
 The objective of the experiment is to generate word forms from root and suffix information.
