@@ -1,16 +1,72 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<!-- Add CSS at the head of HTML file -->
-	    <meta charset="utf-8">
-	<link rel="stylesheet" href="./css/main.css">
+<html lang="en"><head>
+    <style type="text/css">
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <script type="text/javascript" src="js/modernizr-1.5.min.js"></script>
+    <script src="js/jquery-1.7.1.min.js"></script>
+
 </head>
+
 <body>
-  <!-- Your code goes here-->
+       <div>
+<!--       <h1 class="text-h1-lightblue">Word Generation</h1>
+            <div class="content" id="experiment-article-section-4-content">-->
+               <table width="100%">
+                   <tbody>
+                       <tr>
+                         <td align="center">
+                             <select autocomplete="off" name="lang" onchange="getOption(this.value);">
+                              <option selected="selected" value="null_null">---Select language---</option>
+                              <option value="en_roman">English</option>
+                              <option value="hi_devanagiri">Hindi</option>
+                             </select>
+                         </td>
+                       </tr>
+                   </tbody>
+               </table>
+         </div>
+             <br/>
+         <div align="center" id="fldiv"></div>
+         <br/>
+         <div align="center" id="option"></div>
+        
+            <!-- =================================================================================================================================== -->
 
-      <p>Click <a href="word-generation/index.html">here</a> to perform the simulation</p>
+    <script type="text/javascript">
+        var index;
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
-</body>
+        function getdata(lang, scr) {
+            $('#fldiv').load('exp2.php?root=%&category=%&gender=%&form=%&person=%&tense=%&reference=%&lang=' + lang + '&scr=' + scr);
+        }
+
+        function getOption(temp) {
+            temp1 = temp.split("_");
+            lang = temp1[0];
+            scr = temp1[1];
+            document.getElementById("option").innerHTML = "";
+            document.getElementById("fldiv").innerHTML = "";
+            if (scr == "null") {
+                alert("Select language");
+                return;
+            }
+            getdata(lang, scr);
+        }
+
+        function getAnswer(word) {
+            document.getElementById("get_hide").innerHTML = "<button onclick=\"hideAnswer('" + word + "');\">Hide Answer</button> <br><br><p style='font-size:20px' > <b>Answer</b>: " + word + "</p>";
+        }
+
+        function hideAnswer(word) {
+            document.getElementById("get_hide").innerHTML = "<button onclick=\"getAnswer('" + word + "');\">Get Answer</button>";
+        }
+
+     </script>
+
+</body><!-- jQuery -->
 </html>
