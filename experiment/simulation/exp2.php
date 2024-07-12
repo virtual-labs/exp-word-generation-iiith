@@ -67,7 +67,7 @@ $rootWord;
 function getOptionValueRestrict($str,$lang,$scr)
 {
 	$fp=fopen("features.txt","r");
-	$root=array();
+	$root=[];
 	$flag=0;
 	while(!feof($fp))
 	{
@@ -91,7 +91,7 @@ function getOptionValueRestrict($str,$lang,$scr)
 function getOptionValue($str)
 {
 	$fp=fopen("features.txt","r");
-	$root=array();
+	$root=[];
 	$flag=0;
 	while(!feof($fp))
 	{
@@ -146,43 +146,43 @@ $listREFERENCE=getOptionValue(5);
 
 $cROOT;
 if($_GET['root']=="%")
-	$cROOT=$listROOT[rand(0,sizeof($listROOT)-1)];
+	$cROOT=$listROOT[random_int(0,sizeof($listROOT)-1)];
 else
 	$cROOT=$_GET['root'];
 	
 $cCATEGORY;
 if($_GET['category']=="%")
-	$cCATEGORY=$listCATEGORY[rand(0,sizeof($listCATEGORY)-1)];
+	$cCATEGORY=$listCATEGORY[random_int(0,sizeof($listCATEGORY)-1)];
 else
 	$cCATEGORY=$_GET['category'];
 
 $cGENDER;
 if($_GET['gender']=="%")
-	$cGENDER=$listGENDER[rand(0,sizeof($listGENDER)-1)];
+	$cGENDER=$listGENDER[random_int(0,sizeof($listGENDER)-1)];
 else
 	$cGENDER=$_GET['gender'];
 
 $cFORM;
 if($_GET['form']=="%")
-	$cFORM=$listFORM[rand(0,sizeof($listFORM)-1)];
+	$cFORM=$listFORM[random_int(0,sizeof($listFORM)-1)];
 else
 	$cFORM=$_GET['form'];
        
 $cPERSON;
 if($_GET['person']=="%")
-	$cPERSON=$listPERSON[rand(0,sizeof($listPERSON)-1)];
+	$cPERSON=$listPERSON[random_int(0,sizeof($listPERSON)-1)];
 else
 	$cPERSON=$_GET['person'];
 	
 $cTENSE;
 if($_GET['tense']=="%")
-	$cTENSE=$listTENSE[rand(0,sizeof($listTENSE)-1)];
+	$cTENSE=$listTENSE[random_int(0,sizeof($listTENSE)-1)];
 else
 	$cTENSE=$_GET['tense'];
 	
 $cREFERENCE;
 if($_GET['reference']=="%")
-	$cREFERENCE=$listREFERENCE[rand(0,sizeof($listREFERENCE)-1)];
+	$cREFERENCE=$listREFERENCE[random_int(0,sizeof($listREFERENCE)-1)];
 else
 	$cREFERENCE=$_GET['reference'];
 	
@@ -200,7 +200,7 @@ print "<table id='outputT' width=\"100%\" style=\"background-color:#FFD4A8; font
 <th></th>
 </tr>";
 
-$default_option = array("root"=>$cROOT, "category"=>$cCATEGORY, "gender"=>$cGENDER, "form"=>$cFORM, "person"=>$cPERSON, "CASE"=>$cCASE, "tense"=>$cTENSE, "reference"=>$cREFERENCE);
+$default_option = ["root"=>$cROOT, "category"=>$cCATEGORY, "gender"=>$cGENDER, "form"=>$cFORM, "person"=>$cPERSON, "CASE"=>$cCASE, "tense"=>$cTENSE, "reference"=>$cREFERENCE];
 
 print "<tr>";
 echo "<td align='center' class='ROOT' > ".showList($listROOT,$default_option["root"],"<select name='root' id='root' class='spmHandler' onchange='set(this.value);'>",$cROOT,$cCATEGORY,$cGENDER,$cFORM,$cPERSON,$cTENSE,$cREFERENCE,$lang,$scr,"root")."</td>";
@@ -217,7 +217,7 @@ print "</table>";
 $root=$cROOT;
 
 $fp=fopen("features.txt","r");
-$word=array();
+$word=[];
 while(!feof($fp))
 {
 	$string=fgets($fp);
