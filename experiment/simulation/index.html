@@ -1,72 +1,80 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-    <style type="text/css">
-        table,
-        th,
-        td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-    </style>
-    <script type="text/javascript" src="js/modernizr-1.5.min.js"></script>
-    <script src="js/jquery-1.7.1.min.js"></script>
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Generation Simulation</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
-
 <body>
-       <div>
-<!--       <h1 class="text-h1-lightblue">Word Generation</h1>
-            <div class="content" id="experiment-article-section-4-content">-->
-               <table width="100%">
-                   <tbody>
-                       <tr>
-                         <td align="center">
-                             <select autocomplete="off" name="lang" onchange="getOption(this.value);">
-                              <option selected="selected" value="null_null">---Select language---</option>
-                              <option value="en_roman">English</option>
-                              <option value="hi_devanagiri">Hindi</option>
-                             </select>
-                         </td>
-                       </tr>
-                   </tbody>
-               </table>
-         </div>
-             <br/>
-         <div align="center" id="fldiv"></div>
-         <br/>
-         <div align="center" id="option"></div>
-        
-            <!-- =================================================================================================================================== -->
-
-    <script type="text/javascript">
-        var index;
-
-        function getdata(lang, scr) {
-            $('#fldiv').load('exp2.php?root=%&category=%&gender=%&form=%&person=%&tense=%&reference=%&lang=' + lang + '&scr=' + scr);
-        }
-
-        function getOption(temp) {
-            temp1 = temp.split("_");
-            lang = temp1[0];
-            scr = temp1[1];
-            document.getElementById("option").innerHTML = "";
-            document.getElementById("fldiv").innerHTML = "";
-            if (scr == "null") {
-                alert("Select language");
-                return;
-            }
-            getdata(lang, scr);
-        }
-
-        function getAnswer(word) {
-            document.getElementById("get_hide").innerHTML = "<button onclick=\"hideAnswer('" + word + "');\">Hide Answer</button> <br><br><p style='font-size:20px' > <b>Answer</b>: " + word + "</p>";
-        }
-
-        function hideAnswer(word) {
-            document.getElementById("get_hide").innerHTML = "<button onclick=\"getAnswer('" + word + "');\">Get Answer</button>";
-        }
-
-     </script>
-
-</body><!-- jQuery -->
+    <div class="container">
+        <h1>Word Generation Simulation</h1>
+        <div class="simulation-container">
+            <!-- Step 1: Language Selection -->
+            <div class="language-section">
+                <label for="language">Language:</label>
+                <select id="language" class="language-select">
+                    <option value="" selected disabled>---Select Language---</option>
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+            <!-- Step 2: Word Selection (always visible) -->
+            <div class="word-section">
+                <label for="word-select">Word:</label>
+                <select id="word-select" class="word-select">
+                    <option value="">---Select Word---</option>
+                </select>
+            </div>
+            <!-- Step 3: Feature Selection -->
+            <div class="features-section">
+                <div class="features-grid">
+                    <div class="feature-group">
+                        <label for="root">Root:</label>
+                        <select id="root" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="category">Category:</label>
+                        <select id="category" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="number">Number:</label>
+                        <select id="number" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="person">Person:</label>
+                        <select id="person" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="case">Case:</label>
+                        <select id="case" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="script">Script:</label>
+                        <select id="script" class="feature-select" disabled></select>
+                    </div>
+                    <div class="feature-group">
+                        <label for="tense">Tense:</label>
+                        <select id="tense" class="feature-select" disabled></select>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 4: Check Button and Result -->
+            <div id="check-section" style="display:none; text-align:center; margin-top:2rem;">
+                <button id="check-button" class="check-button">Check Answer</button>
+                <button id="find-answer-button" class="check-button" style="margin-left:1rem;">Find Correct Answer</button>
+            </div>
+            <div id="result-section" class="result-section">
+                <div id="feedback" class="feedback-container"></div>
+                <div id="answer" class="answer-container"></div>
+                <img id="result-image" src="" alt="" style="display: none;">
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
 </html>
