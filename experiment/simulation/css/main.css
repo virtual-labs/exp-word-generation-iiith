@@ -1,1 +1,330 @@
-/* You CSS goes in here */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f5f5f5;
+    --text-color: #333;
+    --border-color: #ddd;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.simulation-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.features-section {
+    margin-bottom: 2rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.feature-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.feature-select,
+.word-select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: white;
+}
+
+.feature-select:focus,
+.word-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.word-selection-section {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.word-select {
+    max-width: 300px;
+    margin-bottom: 1rem;
+}
+
+.check-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.check-button:hover {
+    background-color: #357abd;
+}
+
+.check-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+.result-section {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.result-section.show-result {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Make result section always visible */
+.result-section {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+}
+
+#result-message {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+#result-image {
+    max-width: 100px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+}
+
+.success {
+    color: var(--success-color);
+}
+
+.error {
+    color: var(--error-color);
+}
+
+/* Animations and Transitions */
+.feature-select,
+.word-select,
+.check-button {
+    transition: all 0.3s ease;
+}
+
+.feature-select:hover,
+.word-select:hover {
+    border-color: var(--primary-color);
+}
+
+.check-button:active {
+    transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Loading State */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .simulation-container {
+        padding: 1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .simulation-container {
+        padding: 0.75rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+    
+    .feature-select,
+    .word-select {
+        font-size: 0.9rem;
+    }
+    
+    .check-button {
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Language Selection Styles */
+.language-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.language-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.language-select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.language-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.language-select:hover {
+    border-color: var(--primary-color);
+}
+
+/* Add styles for feedback and answer containers */
+.feedback-container, .answer-container {
+    margin-top: 1em;
+    padding: 0.75em 1em;
+    border-radius: 5px;
+    display: none;
+    border: 1px solid transparent;
+}
+
+.feedback-container.show, .answer-container.show { 
+    display: block !important; 
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.feedback-container.success, .answer-container.success { 
+    background: #e6ffe6 !important; 
+    border-color: #2ecc40 !important; 
+    color: #2d572c !important; 
+}
+
+.feedback-container.error, .answer-container.error { 
+    background: #ffe6e6 !important; 
+    border-color: #e74c3c !important; 
+    color: #a94442 !important; 
+}
+
+.answer-container ul {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+
+.answer-container li {
+    margin: 0.25em 0;
+}
+
+/* Debug styles to make containers more visible */
+#feedback, #answer {
+    min-height: 50px !important;
+    position: relative !important;
+    z-index: 1000 !important;
+} 

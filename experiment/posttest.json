@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Which of the following best describes the process of lemmatization in NLP?",
+      "answers": {
+        "a": "Breaking a word into its root and affixes",
+        "b": "Reducing a word to its base or dictionary form",
+        "c": "Counting the number of words in a sentence",
+        "d": "Translating a word into another language"
+      },
+      "explanations": {
+        "a": "Incorrect. This describes morphological analysis, not lemmatization.",
+        "b": "Correct! Lemmatization reduces a word to its base or dictionary form, known as the lemma.",
+        "c": "Incorrect. Word counting is unrelated to lemmatization.",
+        "d": "Incorrect. Translation is a separate NLP task."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the primary purpose of part-of-speech tagging in NLP?",
+      "answers": {
+        "a": "To assign grammatical categories to words in a sentence",
+        "b": "To translate sentences between languages",
+        "c": "To count the number of words in a text",
+        "d": "To arrange words alphabetically"
+      },
+      "explanations": {
+        "a": "Correct! Part-of-speech tagging assigns grammatical categories (like noun, verb, adjective) to each word in a sentence.",
+        "b": "Incorrect. Translation is not the goal of POS tagging.",
+        "c": "Incorrect. Counting words is not related to POS tagging.",
+        "d": "Incorrect. Alphabetical arrangement is a sorting task, not POS tagging."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which feature is NOT typically considered in morphological analysis?",
+      "answers": {
+        "a": "Tense",
+        "b": "Number",
+        "c": "Font color",
+        "d": "Gender"
+      },
+      "explanations": {
+        "a": "Incorrect. Tense is a key grammatical feature in morphological analysis.",
+        "b": "Incorrect. Number (singular/plural) is important in word forms.",
+        "c": "Correct! Font color is a visual property, not a linguistic feature.",
+        "d": "Incorrect. Gender is a fundamental grammatical feature."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why is ambiguity a challenge in morphological analysis?",
+      "answers": {
+        "a": "Because a word can have multiple possible analyses depending on context",
+        "b": "Because every word has only one meaning",
+        "c": "Because punctuation is always missing",
+        "d": "Because all words are spelled the same way"
+      },
+      "explanations": {
+        "a": "Correct! Ambiguity arises when a word can be analyzed in multiple ways depending on its context in a sentence.",
+        "b": "Incorrect. Many words have multiple meanings or roles.",
+        "c": "Incorrect. Punctuation is not the main source of ambiguity in morphological analysis.",
+        "d": "Incorrect. Spelling is not the primary cause of ambiguity."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is the main difference between stemming and lemmatization?",
+      "answers": {
+        "a": "Stemming always produces valid words, lemmatization does not",
+        "b": "Lemmatization reduces words to their dictionary form, stemming may not",
+        "c": "Stemming is only used for English, lemmatization for other languages",
+        "d": "There is no difference"
+      },
+      "explanations": {
+        "a": "Incorrect. Stemming often produces non-words, while lemmatization produces valid dictionary forms.",
+        "b": "Correct! Lemmatization reduces words to their dictionary form, while stemming may just chop off endings.",
+        "c": "Incorrect. Both techniques are used in many languages.",
+        "d": "Incorrect. There are important differences between the two."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In the context of the simulation, what does selecting 'NA' for a feature indicate?",
+      "answers": {
+        "a": "That the feature is not applicable for the current word",
+        "b": "That the feature must be filled in later",
+        "c": "That the answer will be marked incorrect",
+        "d": "That the feature is always required"
+      },
+      "explanations": {
+        "a": "Correct! 'NA' means the feature does not apply to the current word.",
+        "b": "Incorrect. 'NA' is a valid final selection, not a placeholder.",
+        "c": "Incorrect. 'NA' is valid if the feature is not relevant.",
+        "d": "Incorrect. Not all features are always required."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Which of the following best describes a deterministic process in morphological generation?",
+      "answers": {
+        "a": "A process where each input produces a unique output",
+        "b": "A process where multiple outputs are possible for the same input",
+        "c": "A process that always requires user input",
+        "d": "A process that only works for English words"
+      },
+      "explanations": {
+        "a": "Correct! Deterministic means each input (root + features) produces a unique word form.",
+        "b": "Incorrect. Multiple outputs for the same input would be non-deterministic.",
+        "c": "Incorrect. Determinism is about input-output mapping, not user input.",
+        "d": "Incorrect. Determinism is not language-specific."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is a possible source of non-determinism in morphological generation?",
+      "answers": {
+        "a": "Spelling variation allowed by the language",
+        "b": "The user not selecting a language",
+        "c": "The simulation crashing",
+        "d": "The number of dropdowns on the page"
+      },
+      "explanations": {
+        "a": "Correct! Some languages allow multiple correct spellings for the same word form.",
+        "b": "Incorrect. This is a user error, not a property of the generation process.",
+        "c": "Incorrect. Crashes are unrelated to linguistic non-determinism.",
+        "d": "Incorrect. The number of dropdowns does not affect determinism."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "In the simulation, what is the first step a user must take?",
+      "answers": {
+        "a": "Select the language",
+        "b": "Select the root",
+        "c": "Select the features",
+        "d": "Click the check button"
+      },
+      "explanations": {
+        "a": "Correct! The first step is to select the language, which determines the available words and features.",
+        "b": "Incorrect. The root selection comes after choosing the language.",
+        "c": "Incorrect. Features are selected after the root.",
+        "d": "Incorrect. The check button is used after all selections are made."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    }
+  ]
+}
