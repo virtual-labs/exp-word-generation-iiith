@@ -2,156 +2,156 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Which of the following best describes the process of lemmatization in NLP?",
+      "question": "What is the primary input required for morphological word generation?",
       "answers": {
-        "a": "Breaking a word into its root and affixes",
-        "b": "Reducing a word to its base or dictionary form",
-        "c": "Counting the number of words in a sentence",
-        "d": "Translating a word into another language"
-      },
-      "explanations": {
-        "a": "Incorrect. This describes morphological analysis, not lemmatization.",
-        "b": "Correct! Lemmatization reduces a word to its base or dictionary form, known as the lemma.",
-        "c": "Incorrect. Word counting is unrelated to lemmatization.",
-        "d": "Incorrect. Translation is a separate NLP task."
+        "a": "A complete sentence",
+        "b": "A root word and grammatical features",
+        "c": "A dictionary definition",
+        "d": "Audio pronunciation"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Word generation works at the word level, not sentence level.",
+        "b": "Correct! Morphological generation requires a root word and grammatical features (like tense, number, gender) to create the correct word form.",
+        "c": "Incorrect. Dictionary definitions provide meaning, not the structural information needed for generation.",
+        "d": "Incorrect. Audio pronunciation is not used in morphological generation processes."
+      },
       "difficulty": "beginner"
     },
     {
-      "question": "What is the primary purpose of part-of-speech tagging in NLP?",
+      "question": "In morphological generation, what does 'cat=v' typically indicate?",
       "answers": {
-        "a": "To assign grammatical categories to words in a sentence",
-        "b": "To translate sentences between languages",
-        "c": "To count the number of words in a text",
-        "d": "To arrange words alphabetically"
-      },
-      "explanations": {
-        "a": "Correct! Part-of-speech tagging assigns grammatical categories (like noun, verb, adjective) to each word in a sentence.",
-        "b": "Incorrect. Translation is not the goal of POS tagging.",
-        "c": "Incorrect. Counting words is not related to POS tagging.",
-        "d": "Incorrect. Alphabetical arrangement is a sorting task, not POS tagging."
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "Which feature is NOT typically considered in morphological analysis?",
-      "answers": {
-        "a": "Tense",
-        "b": "Number",
-        "c": "Font color",
-        "d": "Gender"
-      },
-      "explanations": {
-        "a": "Incorrect. Tense is a key grammatical feature in morphological analysis.",
-        "b": "Incorrect. Number (singular/plural) is important in word forms.",
-        "c": "Correct! Font color is a visual property, not a linguistic feature.",
-        "d": "Incorrect. Gender is a fundamental grammatical feature."
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "Why is ambiguity a challenge in morphological analysis?",
-      "answers": {
-        "a": "Because a word can have multiple possible analyses depending on context",
-        "b": "Because every word has only one meaning",
-        "c": "Because punctuation is always missing",
-        "d": "Because all words are spelled the same way"
-      },
-      "explanations": {
-        "a": "Correct! Ambiguity arises when a word can be analyzed in multiple ways depending on its context in a sentence.",
-        "b": "Incorrect. Many words have multiple meanings or roles.",
-        "c": "Incorrect. Punctuation is not the main source of ambiguity in morphological analysis.",
-        "d": "Incorrect. Spelling is not the primary cause of ambiguity."
-      },
-      "correctAnswer": "a",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What is the main difference between stemming and lemmatization?",
-      "answers": {
-        "a": "Stemming always produces valid words, lemmatization does not",
-        "b": "Lemmatization reduces words to their dictionary form, stemming may not",
-        "c": "Stemming is only used for English, lemmatization for other languages",
-        "d": "There is no difference"
-      },
-      "explanations": {
-        "a": "Incorrect. Stemming often produces non-words, while lemmatization produces valid dictionary forms.",
-        "b": "Correct! Lemmatization reduces words to their dictionary form, while stemming may just chop off endings.",
-        "c": "Incorrect. Both techniques are used in many languages.",
-        "d": "Incorrect. There are important differences between the two."
+        "a": "The word is about cats",
+        "b": "The word category is verb",
+        "c": "The word has a 'v' sound",
+        "d": "The word is very important"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. 'cat' in this context is an abbreviation, not related to the animal.",
+        "b": "Correct! 'cat=v' indicates that the word category is verb, which affects how other features are applied.",
+        "c": "Incorrect. This notation refers to grammatical category, not phonetic sounds.",
+        "d": "Incorrect. The abbreviation has nothing to do with importance levels."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which feature would be most relevant when generating the word 'played' from the root 'play'?",
+      "answers": {
+        "a": "Color",
+        "b": "Tense",
+        "c": "Font",
+        "d": "Size"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Color is a visual property, not a grammatical feature.",
+        "b": "Correct! Tense is the key feature that transforms 'play' into 'played' (past tense).",
+        "c": "Incorrect. Font is a typographical choice, not a linguistic feature.",
+        "d": "Incorrect. Size is not a grammatical feature in morphological generation."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "How does the simulation demonstrate the concept of feature interaction?",
+      "answers": {
+        "a": "By showing that features work independently",
+        "b": "By demonstrating how features like gender and number work together",
+        "c": "By proving that only one feature matters",
+        "d": "By showing that features are randomly assigned"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Features often interact with each other in morphological generation.",
+        "b": "Correct! The simulation shows how features interact, such as gender affecting number forms in Hindi (लड़का/लड़के).",
+        "c": "Incorrect. Multiple features typically work together to generate correct word forms.",
+        "d": "Incorrect. Features follow systematic grammatical rules, not random assignment."
+      },
       "difficulty": "intermediate"
     },
     {
-      "question": "In the context of the simulation, what does selecting 'NA' for a feature indicate?",
+      "question": "What challenge does irregular morphology present for word generation systems?",
       "answers": {
-        "a": "That the feature is not applicable for the current word",
-        "b": "That the feature must be filled in later",
-        "c": "That the answer will be marked incorrect",
-        "d": "That the feature is always required"
-      },
-      "explanations": {
-        "a": "Correct! 'NA' means the feature does not apply to the current word.",
-        "b": "Incorrect. 'NA' is a valid final selection, not a placeholder.",
-        "c": "Incorrect. 'NA' is valid if the feature is not relevant.",
-        "d": "Incorrect. Not all features are always required."
+        "a": "Irregular forms follow no patterns and must be memorized",
+        "b": "Irregular forms are always longer than regular forms",
+        "c": "Irregular forms only exist in English",
+        "d": "Irregular forms are always wrong"
       },
       "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct! Irregular forms like 'children' (from 'child') don't follow regular patterns and must be stored as exceptions.",
+        "b": "Incorrect. Length is not a defining characteristic of irregular forms.",
+        "c": "Incorrect. Many languages have irregular morphological forms.",
+        "d": "Incorrect. Irregular forms are valid and correct, just unpredictable."
+      },
       "difficulty": "intermediate"
     },
     {
-      "question": "Which of the following best describes a deterministic process in morphological generation?",
+      "question": "Why might a word generation system need to handle multiple scripts for the same language?",
       "answers": {
-        "a": "A process where each input produces a unique output",
-        "b": "A process where multiple outputs are possible for the same input",
-        "c": "A process that always requires user input",
-        "d": "A process that only works for English words"
+        "a": "To make the system more complex",
+        "b": "Because different scripts may have different morphological rules",
+        "c": "To confuse users",
+        "d": "Scripts don't affect word generation"
       },
+      "correctAnswer": "b",
       "explanations": {
-        "a": "Correct! Deterministic means each input (root + features) produces a unique word form.",
-        "b": "Incorrect. Multiple outputs for the same input would be non-deterministic.",
-        "c": "Incorrect. Determinism is about input-output mapping, not user input.",
-        "d": "Incorrect. Determinism is not language-specific."
+        "a": "Incorrect. Complexity is not the goal; accuracy is.",
+        "b": "Correct! Different scripts (like Roman vs Devanagari for Hindi) may have different morphological patterns and rules.",
+        "c": "Incorrect. The purpose is to accurately represent the language, not to confuse users.",
+        "d": "Incorrect. Script can significantly affect morphological generation rules."
       },
-      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is the most significant advantage of morphological generation being deterministic?",
+      "answers": {
+        "a": "It requires less computer memory",
+        "b": "It produces predictable and consistent results",
+        "c": "It works faster than non-deterministic systems",
+        "d": "It only works with simple languages"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Memory usage is not the primary advantage of determinism.",
+        "b": "Correct! Deterministic generation ensures that the same input always produces the same output, making it reliable and predictable.",
+        "c": "Incorrect. Speed is not necessarily related to determinism.",
+        "d": "Incorrect. Deterministic systems can work with complex languages too."
+      },
       "difficulty": "advanced"
     },
     {
-      "question": "What is a possible source of non-determinism in morphological generation?",
+      "question": "In what way does morphological generation differ from simple template filling?",
       "answers": {
-        "a": "Spelling variation allowed by the language",
-        "b": "The user not selecting a language",
-        "c": "The simulation crashing",
-        "d": "The number of dropdowns on the page"
-      },
-      "explanations": {
-        "a": "Correct! Some languages allow multiple correct spellings for the same word form.",
-        "b": "Incorrect. This is a user error, not a property of the generation process.",
-        "c": "Incorrect. Crashes are unrelated to linguistic non-determinism.",
-        "d": "Incorrect. The number of dropdowns does not affect determinism."
+        "a": "Generation requires understanding of linguistic rules and feature interactions",
+        "b": "Generation is always easier than template filling",
+        "c": "Generation only works with nouns",
+        "d": "There is no difference between them"
       },
       "correctAnswer": "a",
+      "explanations": {
+        "a": "Correct! Morphological generation requires deep understanding of how linguistic features interact, not just simple slot-filling.",
+        "b": "Incorrect. Generation can be more complex due to feature interactions and exceptions.",
+        "c": "Incorrect. Generation works with all word categories (nouns, verbs, adjectives, etc.).",
+        "d": "Incorrect. Generation is much more sophisticated than simple template filling."
+      },
       "difficulty": "advanced"
     },
     {
-      "question": "In the simulation, what is the first step a user must take?",
+      "question": "What makes cross-linguistic morphological generation particularly challenging?",
       "answers": {
-        "a": "Select the language",
-        "b": "Select the root",
-        "c": "Select the features",
-        "d": "Click the check button"
+        "a": "All languages have identical grammar rules",
+        "b": "Different languages have vastly different morphological systems and feature sets",
+        "c": "Cross-linguistic generation is impossible",
+        "d": "Only vocabulary differences matter"
       },
+      "correctAnswer": "b",
       "explanations": {
-        "a": "Correct! The first step is to select the language, which determines the available words and features.",
-        "b": "Incorrect. The root selection comes after choosing the language.",
-        "c": "Incorrect. Features are selected after the root.",
-        "d": "Incorrect. The check button is used after all selections are made."
+        "a": "Incorrect. Languages have very different grammatical systems and rules.",
+        "b": "Correct! Different languages have different morphological systems - Hindi has gender and case, English has different tense systems, etc.",
+        "c": "Incorrect. Cross-linguistic generation is possible but challenging.",
+        "d": "Incorrect. Morphological differences are as important as vocabulary differences."
       },
-      "correctAnswer": "a",
       "difficulty": "advanced"
     }
   ]

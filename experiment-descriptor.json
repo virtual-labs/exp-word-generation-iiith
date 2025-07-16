@@ -15,6 +15,13 @@
       "unit-type": "aim"
     },
     {
+      "target": "objective.html",
+      "source": "objective.md",
+      "label": "Objective",
+      "unit-type": "task",
+      "content-type": "text"
+    },
+    {
       "target": "theory.html",
       "source": "theory.md",
       "label": "Theory",
@@ -49,6 +56,27 @@
       "label": "Posttest",
       "unit-type": "task",
       "content-type": "assesment"
+    },
+    {
+      "target": "trivia.html",
+      "source": "trivia.md",
+      "label": "Trivia",
+      "unit-type": "task",
+      "content-type": "text"
+    },
+    {
+      "target": "extended-study.html",
+      "source": "extended-study.md",
+      "label": "Extended Study",
+      "unit-type": "task",
+      "content-type": "text"
+    },
+    {
+      "target": "glossary.html",
+      "source": "glossary.md",
+      "label": "Glossary",
+      "unit-type": "task",
+      "content-type": "text"
     },
     {
       "target": "references.html",
