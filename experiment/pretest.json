@@ -2,156 +2,156 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "In the word analysis simulation, what is the first step in analyzing a word?",
+      "question": "What is the main goal of morphological word generation?",
       "answers": {
-        "a": "Selecting the word's features",
-        "b": "Choosing the language",
-        "c": "Identifying the root",
-        "d": "Determining the tense"
-      },
-      "explanations": {
-        "a": "Incorrect. Feature selection comes after choosing the language and word.",
-        "b": "Correct! The simulation requires selecting the language first to determine available words and features.",
-        "c": "Incorrect. Root identification is part of feature analysis, which comes later.",
-        "d": "Incorrect. Tense is one of the features analyzed after word selection."
+        "a": "To analyze existing words into their parts",
+        "b": "To produce correct word forms from roots and features",
+        "c": "To translate words between different languages",
+        "d": "To find synonyms for given words"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. This describes morphological analysis, which breaks words down rather than building them up.",
+        "b": "Correct! Morphological generation aims to produce correct word forms by combining roots with grammatical features.",
+        "c": "Incorrect. Translation involves converting meaning between languages, not morphological generation.",
+        "d": "Incorrect. Finding synonyms is a lexical task, not morphological generation."
+      },
       "difficulty": "beginner"
     },
     {
-      "question": "What happens when you select a language in the simulation?",
+      "question": "In morphological generation, what does the root represent?",
       "answers": {
-        "a": "All feature options become available immediately",
-        "b": "The word selection dropdown becomes enabled",
-        "c": "The correct answer is shown",
-        "d": "The simulation resets"
-      },
-      "explanations": {
-        "a": "Incorrect. Features are only available after selecting a word.",
-        "b": "Correct! Language selection enables the word dropdown, allowing you to choose from available words in that language.",
-        "c": "Incorrect. The answer is only shown when requested after feature selection.",
-        "d": "Incorrect. The simulation maintains its state after language selection."
+        "a": "The final generated word",
+        "b": "The base form before adding grammatical features",
+        "c": "The pronunciation of the word",
+        "d": "The meaning of the word"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. The root is the starting point, not the final result.",
+        "b": "Correct! The root is the base form of a word before any grammatical modifications are applied.",
+        "c": "Incorrect. The root represents the lexical base, not pronunciation information.",
+        "d": "Incorrect. While related to meaning, the root is the structural base for generation."
+      },
       "difficulty": "beginner"
     },
     {
-      "question": "Which feature is NOT available for analysis in the simulation?",
+      "question": "Which of these is an example of a morphological feature?",
       "answers": {
-        "a": "Gender",
-        "b": "Font style",
-        "c": "Number",
-        "d": "Tense"
-      },
-      "explanations": {
-        "a": "Incorrect. Gender is a key feature analyzed in the simulation.",
-        "b": "Correct! Font style is a presentation feature, not a linguistic feature analyzed in the simulation.",
-        "c": "Incorrect. Number (singular/plural) is a fundamental feature in the analysis.",
-        "d": "Incorrect. Tense is an important feature for verb analysis."
+        "a": "Word length",
+        "b": "Tense (past, present, future)",
+        "c": "Alphabetical order",
+        "d": "Word frequency"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Word length is a physical property, not a grammatical feature.",
+        "b": "Correct! Tense is a key morphological feature that determines how verbs are inflected.",
+        "c": "Incorrect. Alphabetical order is about arrangement, not grammatical properties.",
+        "d": "Incorrect. Word frequency is a statistical measure, not a morphological feature."
+      },
       "difficulty": "beginner"
     },
     {
-      "question": "How does the simulation handle feature selection for different word categories?",
+      "question": "When generating the past tense of 'run', what demonstrates the complexity of English morphology?",
       "answers": {
-        "a": "All features are always available for every word",
-        "b": "Features are dynamically filtered based on the word's category",
-        "c": "Only three features can be selected at a time",
-        "d": "Features are randomly assigned to words"
-      },
-      "explanations": {
-        "a": "Incorrect. Not all features apply to all word categories.",
-        "b": "Correct! The simulation shows relevant features based on the word's category (e.g., tense for verbs, gender for nouns).",
-        "c": "Incorrect. The number of features depends on the word's category and language.",
-        "d": "Incorrect. Features are systematically determined by the word's properties."
+        "a": "run → runned (regular pattern)",
+        "b": "run → ran (irregular pattern)",
+        "c": "run → running (progressive form)",
+        "d": "run → runs (present tense)"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. 'runned' would be the regular pattern, but 'run' is irregular.",
+        "b": "Correct! 'run' → 'ran' shows irregular morphology that generation systems must handle as exceptions.",
+        "c": "Incorrect. 'running' is progressive, not past tense.",
+        "d": "Incorrect. 'runs' is present tense third person, not past tense."
+      },
       "difficulty": "intermediate"
     },
     {
-      "question": "What is the purpose of the 'Check Answer' button in the simulation?",
+      "question": "How do morphological features interact in Hindi word generation?",
       "answers": {
-        "a": "To show the correct answer immediately",
-        "b": "To verify if selected features match the word's actual properties",
-        "c": "To reset the simulation",
-        "d": "To skip to the next word"
+        "a": "Features work completely independently",
+        "b": "Only one feature can be applied at a time",
+        "c": "Features like gender, number, and case influence each other",
+        "d": "Features are randomly combined"
       },
+      "correctAnswer": "c",
       "explanations": {
-        "a": "Incorrect. The 'Show Answer' button reveals the correct answer.",
-        "b": "Correct! The 'Check Answer' button validates if your selected features match the word's actual grammatical properties.",
-        "c": "Incorrect. The button is for validation, not resetting.",
-        "d": "Incorrect. The simulation doesn't automatically advance to the next word."
+        "a": "Incorrect. Features often interact and influence each other in complex ways.",
+        "b": "Incorrect. Multiple features are typically applied simultaneously.",
+        "c": "Correct! In Hindi, features interact - gender affects number forms, case affects endings, etc.",
+        "d": "Incorrect. Feature combination follows systematic grammatical rules."
       },
-      "correctAnswer": "b",
       "difficulty": "intermediate"
     },
     {
-      "question": "How does the simulation handle language-specific features?",
+      "question": "What makes morphological generation different from morphological analysis?",
       "answers": {
-        "a": "All languages use the same feature set",
-        "b": "Features are adapted based on the selected language's grammatical system",
-        "c": "Only English features are available",
-        "d": "Features are randomly assigned for each language"
-      },
-      "explanations": {
-        "a": "Incorrect. Different languages have different grammatical features.",
-        "b": "Correct! The simulation adapts available features based on the selected language's grammatical system (e.g., gender in Hindi, case in both languages).",
-        "c": "Incorrect. The simulation supports multiple languages with their specific features.",
-        "d": "Incorrect. Features are systematically determined by each language's grammar."
+        "a": "They use completely different algorithms",
+        "b": "Generation builds words while analysis breaks them down",
+        "c": "Generation is easier than analysis",
+        "d": "They work with different languages"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. They may use similar underlying linguistic knowledge but in reverse.",
+        "b": "Correct! Generation combines roots and features to build words, while analysis decomposes words into features.",
+        "c": "Incorrect. Neither is inherently easier; they present different challenges.",
+        "d": "Incorrect. Both can work with the same languages."
+      },
       "difficulty": "intermediate"
     },
     {
-      "question": "What is the significance of the 'script' feature in the simulation?",
+      "question": "What computational advantage does deterministic morphological generation provide?",
       "answers": {
-        "a": "It only affects the visual display of words",
-        "b": "It determines the writing system and influences available features",
-        "c": "It's only relevant for English words",
-        "d": "It's automatically set and cannot be changed"
-      },
-      "explanations": {
-        "a": "Incorrect. Script is more than just visual display.",
-        "b": "Correct! The script feature (roman/devanagari) determines the writing system and affects which features are available for analysis.",
-        "c": "Incorrect. Script is relevant for all supported languages.",
-        "d": "Incorrect. Script is determined by the language selection."
+        "a": "It uses less disk space",
+        "b": "It guarantees the same output for the same input",
+        "c": "It processes words faster",
+        "d": "It requires fewer programming languages"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Disk space usage is not the primary advantage of determinism.",
+        "b": "Correct! Deterministic generation ensures reproducible results, which is crucial for reliable language processing.",
+        "c": "Incorrect. Speed is not necessarily related to determinism.",
+        "d": "Incorrect. Programming language choice is unrelated to determinism."
+      },
       "difficulty": "advanced"
     },
     {
-      "question": "How does the simulation handle feature dependencies?",
+      "question": "Why might morphological generation systems need to handle ambiguous feature specifications?",
       "answers": {
-        "a": "All features are independent of each other",
-        "b": "Some features are interdependent (e.g., gender affecting number forms)",
-        "c": "Features are always selected in a specific order",
-        "d": "Dependencies are randomly generated"
-      },
-      "explanations": {
-        "a": "Incorrect. Many features are grammatically interdependent.",
-        "b": "Correct! The simulation maintains grammatical dependencies between features (e.g., gender-number agreement, person-tense relationships).",
-        "c": "Incorrect. While there's a logical order, it's not strictly enforced.",
-        "d": "Incorrect. Dependencies are based on linguistic rules, not randomness."
+        "a": "To make the system more challenging for users",
+        "b": "Because natural language input may be underspecified",
+        "c": "To reduce system performance",
+        "d": "Ambiguity is never a real issue"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Handling ambiguity is about practical language processing, not user challenge.",
+        "b": "Correct! Real-world input may not specify all features, requiring systems to make reasonable defaults or handle multiple possibilities.",
+        "c": "Incorrect. Proper ambiguity handling improves system utility, not reduces performance.",
+        "d": "Incorrect. Ambiguity is a common challenge in natural language processing."
+      },
       "difficulty": "advanced"
     },
     {
-      "question": "What is the role of the 'Show Answer' button in the learning process?",
+      "question": "What is the most significant challenge in building multilingual morphological generation systems?",
       "answers": {
-        "a": "It only shows the correct answer without explanation",
-        "b": "It provides a complete analysis of the word's features with explanations",
-        "c": "It automatically moves to the next word",
-        "d": "It resets all selected features"
-      },
-      "explanations": {
-        "a": "Incorrect. The button provides detailed feature information.",
-        "b": "Correct! The 'Show Answer' button reveals the complete analysis of the word's features, helping users understand the correct grammatical properties.",
-        "c": "Incorrect. The button doesn't automatically advance the simulation.",
-        "d": "Incorrect. The button doesn't reset the current state."
+        "a": "All languages use the same features",
+        "b": "Each language has unique morphological patterns and feature sets",
+        "c": "Multilingual systems are impossible to build",
+        "d": "Only vocabulary translation is needed"
       },
       "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Languages have very different morphological systems and features.",
+        "b": "Correct! Each language has unique morphological patterns - some have rich case systems, others have complex verb conjugations, etc.",
+        "c": "Incorrect. Multilingual systems are challenging but definitely possible.",
+        "d": "Incorrect. Morphological differences are as important as vocabulary differences."
+      },
       "difficulty": "advanced"
     }
   ]
