@@ -613,19 +613,25 @@ function setupInstructionsPanel() {
     const instructionsTab = document.getElementById('instructionsTab');
     const instructionsContent = document.getElementById('instructionsContent');
     const arrowIcon = instructionsTab.querySelector('.arrow-icon');
-    // Set default state: collapsed, arrow down
-    instructionsContent.classList.add('collapsed');
-    instructionsTab.classList.add('collapsed');
-    arrowIcon.classList.remove('fa-chevron-up');
-    arrowIcon.classList.add('fa-chevron-down');
+    
     if (instructionsTab && instructionsContent && arrowIcon) {
+        // Set default state: collapsed, arrow pointing down
+        instructionsContent.classList.add('collapsed');
+        instructionsTab.classList.add('collapsed');
+        arrowIcon.classList.remove('fa-chevron-up');
+        arrowIcon.classList.add('fa-chevron-down');
+        
         instructionsTab.addEventListener('click', () => {
             instructionsContent.classList.toggle('collapsed');
             instructionsTab.classList.toggle('collapsed');
+            
+            // Toggle arrow direction based on collapsed state
             if (instructionsContent.classList.contains('collapsed')) {
+                // Collapsed: arrow points down
                 arrowIcon.classList.remove('fa-chevron-up');
                 arrowIcon.classList.add('fa-chevron-down');
             } else {
+                // Expanded: arrow points up
                 arrowIcon.classList.remove('fa-chevron-down');
                 arrowIcon.classList.add('fa-chevron-up');
             }
