@@ -1,614 +1,634 @@
+// Google Analytics
 (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-67558473-1', 'auto');
-        ga('send', 'pageview');
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+ga('create', 'UA-67558473-1', 'auto');
+ga('send', 'pageview');
 
-// Utility: Capitalize first letter and trim
-function capitalize(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-function captrim(str) {
-    return capitalize((str || '').trim());
-}
-
-// Add this normalization function at the top
-function normalizeValue(val) {
-    if (!val || ['na', 'n/a', 'NA', 'Na', 'nA', 'N/a', 'n/A'].includes((val + '').trim().toLowerCase())) return 'N/A';
-    if (val.toLowerCase() === 'roman') return 'Roman';
-    if (val.toLowerCase() === 'devanagari') return 'Devanagari';
-    if (val.toLowerCase() === 'direct') return 'Direct';
-    if (val.toLowerCase() === 'oblique') return 'Oblique';
-    return captrim(val);
-}
-
-// Data structures to store word features and user selections
-class WordFeatures {
+// Morphological Analysis Data Manager
+class MorphologyAnalyzer {
     constructor() {
-        this.wordData = new Map();
-        this.currentWord = null;
-        // Remove all hardcoded options; will be built from features.txt
-        this.allFeatures = null;
-        this.userSelections = {};
+        this.rootWords = new Map();
+        this.paradigmData = new Map();
+        this.answerOptions = [];
+        this.currentRoot = null;
+        this.currentParadigm = null;
+        this.correctAnswers = [];
+        this.userAnswers = [];
+        this.isInitialized = false;
     }
 
-    // Process features data after loading
-    processFeatures(words) {
-        console.log('Starting to process features for words:', words.length);
-        words.forEach((wordInfo, index) => {
-            const { word, language, root, features } = wordInfo;
-            console.log(`Processing word ${index + 1}:`, { word, language, root });
-            
-            // Skip if word or language is missing
-            if (!word || !language) {
-                console.warn('Skipping word due to missing word or language:', wordInfo);
-                return;
-            }
-            
-            // Initialize or get existing word data
-            if (!this.wordData.has(word)) {
-                this.wordData.set(word, {
-                    root: root,
-                    language: language,
-                    features: []
-                });
-                console.log(`Added new word to wordData: ${word} (${language})`);
-            }
-            
-            // Add features
-            const wordData = this.wordData.get(word);
-            features.forEach(feature => {
-                // Normalize feature values
-                const normalizedFeature = {};
-                for (const [key, value] of Object.entries(feature)) {
-                    normalizedFeature[key] = value === 'na' || value === 'NA' || !value ? 'N/A' : 
-                        key === 'category' ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() : 
-                        value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-                }
-                wordData.features.push(normalizedFeature);
-            });
-        });
-
-        // Log the final word data for verification
-        console.log('Final word data loaded:');
-        console.log('Total words:', this.wordData.size);
-        console.log('Words by language:');
-        const wordsByLang = {};
-        this.wordData.forEach((info, word) => {
-            if (!wordsByLang[info.language]) {
-                wordsByLang[info.language] = [];
-            }
-            wordsByLang[info.language].push(word);
-        });
-        console.log(wordsByLang);
-
-        // Build allFeatures dynamically from features.txt
-        const featureSets = {
-            root: new Set(),
-            category: new Set(),
-            gender: new Set(),
-            number: new Set(),
-            person: new Set(),
-            script: new Set(),
-            case: new Set(),
-            tense: new Set()
-        };
-        words.forEach(wordInfo => {
-            wordInfo.features.forEach(feature => {
-                Object.keys(featureSets).forEach(key => {
-                    if (feature[key]) featureSets[key].add(normalizeValue(feature[key]));
-                });
-            });
-        });
-        // Always include 'N/A' for each feature
-        Object.values(featureSets).forEach(set => set.add('N/A'));
-        this.allFeatures = featureSets;
-
-        console.log('All unique possible dropdown values for each morphological feature:');
-        Object.entries(featureSets).forEach(([key, set]) => {
-            console.log(`${key}:`, Array.from(set).sort());
-        });
-    }
-
-    // Get words for selected language
-    getWordsForLanguage(language) {
-        console.log('getWordsForLanguage called with:', {
-            language: language,
-            languageType: typeof language,
-            wordDataSize: this.wordData.size
-        });
-
-        // Log all unique languages in the data
-        const uniqueLanguages = new Set(Array.from(this.wordData.values()).map(info => info.language));
-        console.log('Available languages in data:', Array.from(uniqueLanguages));
-
-        const words = Array.from(this.wordData.entries())
-            .filter(([word, info]) => {
-                console.log(`Comparing word "${word}":`, {
-                    wordLanguage: info.language,
-                    searchLanguage: language,
-                    matches: info.language === language
-                });
-                return info.language === language;
-            })
-            .map(([word, _]) => word)
-            .sort();
-
-        console.log(`Found ${words.length} words for language "${language}":`, words);
-        return words;
-    }
-
-    // Validate user's feature selections
-    validateSelection(language, word, selections) {
-        const wordInfo = this.wordData.get(word);
-        if (!wordInfo || !wordInfo.features || !wordInfo.features[0]) {
-            console.error('No word info or features found for:', word);
-            return false;
-        }
-        const correctFeatures = wordInfo.features[0];
-        
-        return Object.entries(selections).every(([feature, value]) => {
-            const userValue = normalizeValue(value);
-            const correctValue = normalizeValue(correctFeatures[feature]);
-            console.log(`Comparing feature "${feature}":`, { userValue, correctValue });
-            return userValue === correctValue;
-        });
-    }
-
-    // Helper function to normalize feature values
-    normalizeFeatureValue(value) {
-        if (!value || value === '') return 'N/A';
-        if (value.toLowerCase() === 'na' || value.toLowerCase() === 'n/a') return 'N/A';
-        return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-    }
-
-    // Get feature options for selected word
-    getFeatureOptions(word) {
-        console.log('Getting feature options for word:', word);
-        const wordInfo = this.wordData.get(word);
-        if (!wordInfo) {
-            console.error('No word info found for:', word);
-            return null;
-        }
-        // Find all words with the same root value (case-insensitive, normalized, across all languages)
-        const relatedWords = [];
-        const targetRoot = normalizeValue(wordInfo.root);
-        this.wordData.forEach((info, w) => {
-            if (normalizeValue(info.root) === targetRoot) {
-                relatedWords.push(w);
-            }
-        });
-        // Get unique features for this word
-        const uniqueFeatures = {
-            root: new Set(relatedWords), // Use all related word forms for root dropdown
-            category: new Set(),
-            gender: new Set(),
-            number: new Set(),
-            person: new Set(),
-            script: new Set(),
-            case: new Set(),
-            tense: new Set()
-        };
-        wordInfo.features.forEach((feature, index) => {
-            for (const [key, value] of Object.entries(feature)) {
-                if (key !== 'root') {
-                    const normalizedValue = this.normalizeFeatureValue(value);
-                    uniqueFeatures[key].add(normalizedValue);
-                }
-            }
-        });
-        // Merge with default options and ensure N/A is always available
-        const mergedFeatures = {};
-        for (const [key, defaultSet] of Object.entries(this.allFeatures)) {
-            mergedFeatures[key] = new Set([...uniqueFeatures[key], ...defaultSet]);
-        }
-        mergedFeatures.root = uniqueFeatures.root;
-        return mergedFeatures;
-    }
-
-    // Load word features from data file
-    async loadFeatures() {
+    // Load data from text files (replacing PHP file reading)
+    async loadData() {
         try {
-            const response = await fetch('features.txt');
-            if (!response.ok) throw new Error('features.txt not found');
-            const text = await response.text();
-            console.log('Loading features.txt...');
+            console.log('Loading data files...');
             
-            const lines = text.split('\n').filter(line => line.trim());
-            console.log('Total lines in features.txt:', lines.length);
-            
-            // Log first few lines for verification
-            console.log('First few lines from features.txt:');
-            lines.slice(0, 5).forEach((line, i) => {
-                console.log(`Line ${i + 1}:`, line);
-                // Parse and log language field
-                const fields = line.split('\t');
-                if (fields.length >= 8) {
-                    console.log(`Language field in line ${i + 1}:`, {
-                        raw: fields[7],
-                        trimmed: fields[7].trim(),
-                        lowercase: fields[7].trim().toLowerCase()
-                    });
-                }
-            });
-            
-            const words = lines.map((line, index) => {
-                const fields = line.split('\t');
-                if (fields.length < 10) {
-                    console.warn(`Invalid line format at line ${index + 1}:`, line);
-                    return null;
-                }
-                const [word, root, category, gender, number, case_, person, language, script, tense] = fields;
-                
-                // Log English words being processed
-                if (language.trim().toLowerCase() === 'en') {
-                    console.log('Processing English word:', word.trim());
-                }
-                
-                return {
-                    word: word.trim(),
-                    language: language.trim().toLowerCase(), // Normalize language code
-                    root: root.trim(),
-                    features: [{
-                        root: root.trim(),
-                        category: category.trim(),
-                        gender: gender.trim(),
-                        number: number.trim(),
-                        person: person.trim(),
-                        script: script.trim(),
-                        case: case_.trim(),
-                        tense: tense.trim()
-                    }]
-                };
-            }).filter(Boolean);
-            
-            console.log('Processed words:', words.length);
-            console.log('Sample words by language:', 
-                words.reduce((acc, w) => {
-                    if (!acc[w.language]) acc[w.language] = [];
-                    if (acc[w.language].length < 3) acc[w.language].push(w.word);
-                    return acc;
-                }, {}));
-            
-            this.processFeatures(words);
-            
-            // Verify data after processing
-            console.log('Verification after processing:');
-            console.log('Total words in wordData:', this.wordData.size);
-            console.log('English words:', this.getWordsForLanguage('en'));
-            console.log('Hindi words:', this.getWordsForLanguage('hi'));
-            
+            // Load options (root words)
+            const optionsResponse = await fetch('Exp3/options.txt');
+            if (!optionsResponse.ok) {
+                throw new Error(`Failed to load options.txt: ${optionsResponse.status}`);
+            }
+            const optionsText = await optionsResponse.text();
+            console.log('Options text loaded, first 200 chars:', optionsText.substring(0, 200));
+            this.parseOptions(optionsText);
+
+            // Load paradigm data
+            const paradigmResponse = await fetch('Exp3/paradigm.txt');
+            if (!paradigmResponse.ok) {
+                throw new Error(`Failed to load paradigm.txt: ${paradigmResponse.status}`);
+            }
+            const paradigmText = await paradigmResponse.text();
+            console.log('Paradigm text loaded, first 200 chars:', paradigmText.substring(0, 200));
+            this.parseParadigm(paradigmText);
+
+            // Load answer options
+            const answersResponse = await fetch('Exp3/answers_opt.txt');
+            if (!answersResponse.ok) {
+                throw new Error(`Failed to load answers_opt.txt: ${answersResponse.status}`);
+            }
+            const answersText = await answersResponse.text();
+            console.log('Answers text loaded, first 200 chars:', answersText.substring(0, 200));
+            this.parseAnswerOptions(answersText);
+
+            this.isInitialized = true;
+            console.log('Data loaded successfully');
+            console.log('Root words:', Array.from(this.rootWords.entries()));
+            console.log('Paradigm data:', Array.from(this.paradigmData.entries()));
+            console.log('Answer options:', this.answerOptions);
             return true;
         } catch (error) {
-            console.error('Error loading features:', error);
+            console.error('Error loading data:', error);
             return false;
         }
     }
 
-    // Clear user selections
-    clearSelections() {
-        this.userSelections = {};
-        this.currentWord = null;
+    // Parse options.txt file
+    parseOptions(text) {
+        const lines = text.trim().split('\n');
+        console.log('Parsing options:', lines);
+        
+        lines.forEach(line => {
+            const parts = line.trim().split(/\s+/);
+            if (parts.length >= 2) {
+                const paradigmId = parts[0];
+                const word = parts[1];
+                this.rootWords.set(word, paradigmId);
+                console.log(`Added root word: ${word} -> paradigm ${paradigmId}`);
+            }
+        });
+    }
+
+    // Parse paradigm.txt file
+    parseParadigm(text) {
+        const lines = text.trim().split('\n');
+        console.log('Parsing paradigm lines:', lines.length);
+        
+        lines.forEach((line, lineIndex) => {
+            const parts = line.trim().split(/\s+/);
+            console.log(`Line ${lineIndex + 1}: "${line.trim()}" -> ${parts.length} parts`);
+            
+            if (parts.length >= 10) {
+                const paradigmId = parts[0];
+                const rootWord = parts[1];
+                // Ensure all transformations are properly trimmed
+                const transformations = parts.slice(2, 10).map(t => t.trim());
+                this.paradigmData.set(paradigmId, {
+                    root: rootWord,
+                    transformations: transformations
+                });
+                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", transformations=`, transformations);
+            } else {
+                console.warn(`Line ${lineIndex + 1} has insufficient parts (${parts.length}):`, parts);
+            }
+        });
+    }
+
+    // Parse answers_opt.txt file
+    parseAnswerOptions(text) {
+        // Split by newlines and filter out empty lines, trim each option
+        this.answerOptions = text.trim().split('\n')
+            .map(opt => opt.trim())
+            .filter(opt => opt.length > 0);
+        console.log('Answer options parsed:', this.answerOptions.length, 'options');
+        console.log('First 10 options:', this.answerOptions.slice(0, 10));
+    }
+
+    // Get root words for dropdown
+    getRootWords() {
+        return Array.from(this.rootWords.keys());
+    }
+
+    // Get paradigm for selected root
+    getParadigm(rootWord) {
+        const paradigmId = this.rootWords.get(rootWord);
+        console.log(`Getting paradigm for ${rootWord}: paradigm ID ${paradigmId}`);
+        
+        if (paradigmId) {
+            const paradigm = this.paradigmData.get(paradigmId);
+            console.log(`Found paradigm:`, paradigm);
+            return paradigm;
+        }
+        return null;
+    }
+
+    // Generate word forms table
+    generateWordFormsTable(rootWord) {
+        const paradigm = this.getParadigm(rootWord);
+        if (!paradigm) return null;
+
+        const forms = [
+            { number: 'singular', case: 'direct', transformIndex: 0 },
+            { number: 'singular', case: 'oblique', transformIndex: 1 },
+            { number: 'plural', case: 'direct', transformIndex: 2 },
+            { number: 'plural', case: 'oblique', transformIndex: 3 }
+        ];
+
+        return forms.map(form => ({
+            word: this.generateWordForm(rootWord, paradigm.transformations[form.transformIndex]),
+            root: rootWord,
+            number: form.number,
+            case: form.case,
+            transformation: paradigm.transformations[form.transformIndex]
+        }));
+    }
+
+    // Generate word form by applying suffix transformation
+    generateWordForm(root, transformation) {
+        // For Hindi morphology, we need to handle different transformation patterns
+        console.log(`Generating word form: root="${root}", transformation="${transformation}"`);
+        
+        // Handle special cases
+        if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
+            console.log('No transformation needed, returning root');
+            return root;
+        }
+        
+        // If transformation is same as root ending, no change needed
+        const lastChar = root.slice(-1);
+        console.log(`Last char of root: "${lastChar}"`);
+        
+        if (transformation === lastChar) {
+            console.log('Transformation matches last char, returning root');
+            return root;
+        }
+        
+        // For most Hindi words, replace the last character with the transformation
+        if (transformation !== 'आ') {
+        const baseRoot = root.slice(0, -1);
+            const newForm = baseRoot + transformation;
+            console.log(`Transformed: "${root}" -> "${newForm}" (base: "${baseRoot}", suffix: "${transformation}")`);
+            return newForm;
+        }
+        
+        // If transformation is 'आ', return root as is
+        console.log('Transformation is आ, returning root');
+        return root;
+    }
+
+    // Get correct answers for current paradigm
+    getCorrectAnswers(rootWord) {
+        const paradigm = this.getParadigm(rootWord);
+        if (!paradigm) return [];
+
+        // Return the transformations as correct answers
+        // Format: [del_sing_dr, del_plu_dr, del_sing_ob, del_plu_ob, add_sing_dr, add_plu_dr, add_sing_ob, add_plu_ob]
+        const transformations = paradigm.transformations;
+        return [
+            transformations[0], // delete singular direct
+            transformations[2], // delete plural direct  
+            transformations[1], // delete singular oblique
+            transformations[3], // delete plural oblique
+            transformations[0], // add singular direct
+            transformations[2], // add plural direct
+            transformations[1], // add singular oblique
+            transformations[3]  // add plural oblique
+        ];
+    }
+
+    // Check user answers
+    checkAnswers(userAnswers) {
+        const results = [];
+        const correct = this.correctAnswers;
+        
+        console.log('Checking answers:', userAnswers);
+        console.log('Correct answers:', correct);
+        
+        for (let i = 0; i < 8; i++) {
+            const isCorrect = userAnswers[i] === correct[i];
+            results.push(isCorrect);
+            console.log(`Answer ${i}: ${userAnswers[i]} vs ${correct[i]} = ${isCorrect}`);
+        }
+        
+        return results;
     }
 }
 
 // DOM Elements
-const languageSelect = document.getElementById('language');
-const wordSelect = document.getElementById('word'); // Fix: Changed from 'root' to 'word'
-const rootSelect = document.getElementById('root');
-const categorySelect = document.getElementById('category');
-const genderSelect = document.getElementById('gender');
-const numberSelect = document.getElementById('number');
-const personSelect = document.getElementById('person');
-const scriptSelect = document.getElementById('script');
-const caseSelect = document.getElementById('case');
-const tenseSelect = document.getElementById('tense');
-const checkButton = document.getElementById('checkButton');
-const showAnswerButton = document.getElementById('showAnswerButton');
+const rootSelection = document.getElementById('rootSelection');
+const paradigmSection = document.getElementById('paradigmSection');
+const paradigmTable = document.getElementById('paradigmTable');
+const addDeleteSection = document.getElementById('addDeleteSection');
+const addDeleteTableBody = document.getElementById('addDeleteTableBody');
+const submitButton = document.getElementById('submitButton');
+const getAnswerButton = document.getElementById('getAnswerButton');
 const resetButton = document.getElementById('resetButton');
-const feedbackContainer = document.getElementById('feedback');
-const answerContainer = document.getElementById('answer');
+const feedback = document.getElementById('feedback');
+const correctAnswer = document.getElementById('correctAnswer');
+const checkHeader = document.getElementById('checkHeader');
 
-// Initialize word features manager
-const wordFeatures = new WordFeatures();
+// Initialize the analyzer
+const analyzer = new MorphologyAnalyzer();
 
-// Helper Functions
+// Initialize the application
+async function initializeApp() {
+    console.log('Initializing app...');
+    
+    try {
+    const loaded = await analyzer.loadData();
+    if (!loaded) {
+        showFeedback('Error loading data. Please refresh the page.', 'error');
+            console.error('Failed to load data');
+            return;
+        }
+
+        // Verify data was loaded
+        if (analyzer.rootWords.size === 0) {
+            console.error('No root words loaded!');
+            showFeedback('No data loaded. Please check the data files.', 'error');
+        return;
+    }
+
+    populateRootWordsDropdown();
+    setupEventListeners();
+    setupInstructionsPanel();
+    
+    console.log('App initialized successfully');
+        console.log('Total root words available:', analyzer.rootWords.size);
+    } catch (error) {
+        console.error('Error during initialization:', error);
+        showFeedback('Error initializing application: ' + error.message, 'error');
+    }
+}
+
+// Populate root words dropdown
+function populateRootWordsDropdown() {
+    const rootWords = analyzer.getRootWords();
+    console.log('Populating dropdown with root words:', rootWords);
+    
+    // Clear existing options
+    rootSelection.innerHTML = '';
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select a root word...';
+    rootSelection.appendChild(defaultOption);
+    
+    // Add root word options
+    rootWords.forEach((word, index) => {
+        const option = document.createElement('option');
+        option.value = word;
+        option.textContent = word;
+        // Add data attribute for debugging
+        option.setAttribute('data-index', index);
+        rootSelection.appendChild(option);
+        console.log(`Added option ${index + 1}: "${word}" (length: ${word.length})`);
+    });
+    
+    console.log('Dropdown populated with', rootWords.length, 'words');
+    console.log('Total options in dropdown:', rootSelection.options.length);
+    
+    // Verify options are visible
+    if (rootSelection.options.length <= 1) {
+        console.error('Dropdown has no word options!');
+        showFeedback('No words available in dropdown. Please check data files.', 'error');
+    }
+}
+
+// Handle root word selection
+function handleRootSelection() {
+    const selectedRoot = rootSelection.value;
+    console.log('Root selected:', selectedRoot);
+    
+    if (!selectedRoot) {
+        hideParadigmSection();
+        hideAddDeleteSection();
+        return;
+    }
+
+    analyzer.currentRoot = selectedRoot;
+    analyzer.currentParadigm = analyzer.getParadigm(selectedRoot);
+    analyzer.correctAnswers = analyzer.getCorrectAnswers(selectedRoot);
+    
+    console.log('Current paradigm:', analyzer.currentParadigm);
+    console.log('Correct answers:', analyzer.correctAnswers);
+    
+    showParadigmTable(selectedRoot);
+    showAddDeleteTable();
+    clearFeedback();
+    clearResults();
+}
+
+// Show paradigm table
+function showParadigmTable(rootWord) {
+    const wordForms = analyzer.generateWordFormsTable(rootWord);
+    if (!wordForms) {
+        console.error('No word forms generated for:', rootWord);
+        return;
+    }
+
+    console.log('Generating paradigm table for:', rootWord);
+    console.log('Word forms:', wordForms);
+
+    let tableHTML = `
+        <table class="paradigm-display-table">
+            <thead>
+                <tr>
+                    <th>Word</th>
+                    <th>Root</th>
+                    <th>Number</th>
+                    <th>Case</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    wordForms.forEach((form, index) => {
+        console.log(`Form ${index}: word="${form.word}", root="${form.root}", number="${form.number}", case="${form.case}"`);
+        tableHTML += `
+            <tr>
+                <td>${form.word || '(empty)'}</td>
+                <td>${form.root || '(empty)'}</td>
+                <td>${form.number}</td>
+                <td>${form.case}</td>
+            </tr>
+        `;
+    });
+
+    tableHTML += '</tbody></table>';
+    paradigmTable.innerHTML = tableHTML;
+    paradigmSection.style.display = 'block';
+}
+
+// Show add-delete table
+function showAddDeleteTable() {
+    const categories = [
+        { number: 'sing', case: 'dr', label: 'Singular Direct', fullNumber: 'Singular', fullCase: 'Direct' },
+        { number: 'plu', case: 'dr', label: 'Plural Direct', fullNumber: 'Plural', fullCase: 'Direct' },
+        { number: 'sing', case: 'ob', label: 'Singular Oblique', fullNumber: 'Singular', fullCase: 'Oblique' },
+        { number: 'plu', case: 'ob', label: 'Plural Oblique', fullNumber: 'Plural', fullCase: 'Oblique' }
+    ];
+
+    console.log('Creating add-delete table with options:', analyzer.answerOptions);
+
+    let tableHTML = '';
+    categories.forEach((cat, index) => {
+        tableHTML += `
+            <tr>
+                <td>
+                    <select id="del${cat.number}${cat.case}" class="select-box">
+                        <option value="">Select...</option>
+                        ${analyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select id="add${cat.number}${cat.case}" class="select-box">
+                        <option value="">Select...</option>
+                        ${analyzer.answerOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>
+                </td>
+                <td>${cat.fullNumber}</td>
+                <td>${cat.fullCase}</td>
+                <td id="check${index}" class="check-cell"></td>
+            </tr>
+        `;
+    });
+
+    addDeleteTableBody.innerHTML = tableHTML;
+    addDeleteSection.style.display = 'block';
+    submitButton.disabled = false;
+    
+    // Clear all dropdowns to default empty state
+    const allSelects = addDeleteTableBody.querySelectorAll('select');
+    allSelects.forEach(select => {
+        select.selectedIndex = 0;
+    });
+}
+
+// Handle form submission
+function handleSubmit() {
+    console.log('Submit button clicked');
+    
+    if (!analyzer.currentRoot) {
+        console.log('No root selected');
+        return;
+    }
+
+    // Collect user answers
+    const userAnswers = [
+        document.getElementById('delsingdr').value,
+        document.getElementById('delpludr').value,
+        document.getElementById('delsingob').value,
+        document.getElementById('delpluob').value,
+        document.getElementById('addsingdr').value,
+        document.getElementById('addpludr').value,
+        document.getElementById('addsingob').value,
+        document.getElementById('addpluob').value
+    ];
+
+    console.log('User answers collected:', userAnswers);
+
+    analyzer.userAnswers = userAnswers;
+    const results = analyzer.checkAnswers(userAnswers);
+    
+    console.log('Check results:', results);
+    
+    // Update UI with results
+    updateCheckResults(results);
+    
+    // Show feedback
+    const allCorrect = results.every(result => result);
+    if (allCorrect) {
+        showFeedback('✅ Correct! All transformations are correct.', 'success');
+        getAnswerButton.style.display = 'none';
+    } else {
+        showFeedback('❌ Some transformations are incorrect. Review your answers or use "Get Answer" to see the correct transformations.', 'error');
+        getAnswerButton.style.display = 'inline-flex';
+        getAnswerButton.disabled = false;
+    }
+    
+    checkHeader.innerHTML = '<b>Results</b>';
+}
+
+// Update check results in the table
+function updateCheckResults(results) {
+    // Get all select elements
+    const deleteSelects = [
+        document.getElementById('delsingdr'),
+        document.getElementById('delpludr'),
+        document.getElementById('delsingob'),
+        document.getElementById('delpluob')
+    ];
+    
+    const addSelects = [
+        document.getElementById('addsingdr'),
+        document.getElementById('addpludr'),
+        document.getElementById('addsingob'),
+        document.getElementById('addpluob')
+    ];
+    
+    // Update visual feedback for dropdowns
+    for (let i = 0; i < 4; i++) {
+        const checkCell = document.getElementById(`check${i}`);
+        const deleteCorrect = results[i];
+        const addCorrect = results[i + 4];
+        
+        // Update dropdown styles
+        if (deleteSelects[i]) {
+            deleteSelects[i].classList.remove('correct', 'incorrect');
+            deleteSelects[i].classList.add(deleteCorrect ? 'correct' : 'incorrect');
+        }
+        
+        if (addSelects[i]) {
+            addSelects[i].classList.remove('correct', 'incorrect');
+            addSelects[i].classList.add(addCorrect ? 'correct' : 'incorrect');
+        }
+        
+        // Update check cell
+        if (deleteCorrect && addCorrect) {
+            checkCell.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50; font-size: 1.2em;"></i>';
+        } else {
+            checkCell.innerHTML = '<i class="fas fa-times-circle" style="color: #F44336; font-size: 1.2em;"></i>';
+        }
+    }
+}
+
+// Show correct answers
+function showCorrectAnswers() {
+    if (!analyzer.correctAnswers.length) {
+        console.log('No correct answers available');
+        return;
+    }
+
+    console.log('Showing correct answers:', analyzer.correctAnswers);
+
+    let answerHTML = `
+        <h4>Correct Add-Delete Table for "${analyzer.currentRoot}"</h4>
+        <table class="correct-answer-table">
+            <thead>
+                <tr>
+                    <th>Delete</th>
+                    <th>Add</th>
+                    <th>Number</th>
+                    <th>Case</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    const categories = [
+        { number: 'Singular', case: 'Direct' },
+        { number: 'Plural', case: 'Direct' },
+        { number: 'Singular', case: 'Oblique' },
+        { number: 'Plural', case: 'Oblique' }
+    ];
+
+    categories.forEach((cat, index) => {
+        answerHTML += `
+            <tr>
+                <td>${analyzer.correctAnswers[index]}</td>
+                <td>${analyzer.correctAnswers[index + 4]}</td>
+                <td>${cat.number}</td>
+                <td>${cat.case}</td>
+            </tr>
+        `;
+    });
+
+    answerHTML += '</tbody></table>';
+    correctAnswer.innerHTML = answerHTML;
+    correctAnswer.style.display = 'block';
+}
+
+// Reset the simulation
+function resetSimulation() {
+    console.log('Resetting simulation');
+    
+    rootSelection.selectedIndex = 0;
+    hideParadigmSection();
+    hideAddDeleteSection();
+    clearFeedback();
+    clearResults();
+    analyzer.currentRoot = null;
+    analyzer.currentParadigm = null;
+    analyzer.correctAnswers = [];
+    analyzer.userAnswers = [];
+    submitButton.disabled = true;
+    getAnswerButton.style.display = 'none';
+    checkHeader.innerHTML = '';
+    
+    // Clear correct answer display
+    correctAnswer.innerHTML = '';
+    correctAnswer.style.display = 'none';
+}
+
+// Utility functions
+function hideParadigmSection() {
+    paradigmSection.style.display = 'none';
+}
+
+function hideAddDeleteSection() {
+    addDeleteSection.style.display = 'none';
+}
+
 function clearFeedback() {
-    feedbackContainer.textContent = '';
-    feedbackContainer.className = 'feedback-container';
-    answerContainer.innerHTML = '';
-    answerContainer.className = 'answer-container';
-    // Remove highlight-incorrect from all dropdowns
-    [rootSelect, categorySelect, genderSelect, numberSelect, personSelect, scriptSelect, caseSelect, tenseSelect].forEach(select => {
-        select.classList.remove('highlight-incorrect');
+    feedback.innerHTML = '';
+    feedback.className = 'feedback-container';
+}
+
+function clearResults() {
+    correctAnswer.innerHTML = '';
+    correctAnswer.style.display = 'none';
+    checkHeader.innerHTML = '';
+    
+    // Clear check marks
+    for (let i = 0; i < 4; i++) {
+        const checkCell = document.getElementById(`check${i}`);
+        if (checkCell) {
+            checkCell.innerHTML = '';
+        }
+    }
+    
+    // Clear all dropdown selections
+    const allSelects = addDeleteTableBody.querySelectorAll('select');
+    allSelects.forEach(select => {
+        select.selectedIndex = 0;
+        select.classList.remove('correct', 'incorrect');
     });
 }
 
 function showFeedback(message, type) {
-    feedbackContainer.textContent = message;
-    feedbackContainer.className = `feedback-container ${type}`;
+    feedback.innerHTML = message;
+    feedback.className = `feedback-container ${type}`;
 }
 
-// Add highlight-incorrect CSS class to dropdowns with incorrect answers
-function highlightIncorrectDropdowns(selections, correctFeatures) {
-    const dropdownMap = {
-        root: rootSelect,
-        category: categorySelect,
-        gender: genderSelect,
-        number: numberSelect,
-        person: personSelect,
-        script: scriptSelect,
-        case: caseSelect,
-        tense: tenseSelect
-    };
-    Object.keys(selections).forEach(key => {
-        const userValue = normalizeValue(selections[key]);
-        const correctValue = normalizeValue(correctFeatures[key]);
-        if (userValue !== correctValue) {
-            dropdownMap[key].classList.add('highlight-incorrect');
-        } else {
-            dropdownMap[key].classList.remove('highlight-incorrect');
-        }
-    });
-}
-
-// Helper function to populate dropdown options
-function setDropdownOptions(select, options, defaultText = 'Select...', addNA = true) {
-    select.innerHTML = `<option value="">${defaultText}</option>`;
+// Setup event listeners
+function setupEventListeners() {
+    console.log('Setting up event listeners');
     
-    // Normalize and filter options
-    const normalizeValue = (value) => {
-        if (!value || value === '') return 'N/A';
-        if (['na', 'n/a', 'n/a', 'NA', 'Na', 'nA', 'N/a', 'n/A'].includes(value.trim().toLowerCase())) return 'N/A';
-        return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-    };
-
-    const sortedOptions = Array.from(options)
-        .filter(option => option && option !== '')
-        .map(option => normalizeValue(option))
-        .filter((value, index, self) => self.indexOf(value) === index) // Remove duplicates
-        .sort((a, b) => {
-            if (a === 'N/A') return 1;
-            if (b === 'N/A') return -1;
-            return a.localeCompare(b);
-        });
-
-    sortedOptions.forEach(option => {
-        const opt = document.createElement('option');
-        opt.value = option;
-        opt.textContent = option;
-        select.appendChild(opt);
-    });
-
-    // Add N/A if not present and requested
-    if (addNA && !sortedOptions.includes('N/A')) {
-        const naOption = document.createElement('option');
-        naOption.value = 'N/A';
-        naOption.textContent = 'N/A';
-        select.appendChild(naOption);
-    }
+    rootSelection.addEventListener('change', handleRootSelection);
+    submitButton.addEventListener('click', handleSubmit);
+    getAnswerButton.addEventListener('click', showCorrectAnswers);
+    resetButton.addEventListener('click', resetSimulation);
 }
 
-// Enable/disable feature dropdowns
-function enableFeatureDropdowns(enable) {
-    [rootSelect, categorySelect, genderSelect, numberSelect,
-     personSelect, scriptSelect, caseSelect, tenseSelect].forEach(select => {
-        select.disabled = !enable;
-        if (!enable) {
-            select.innerHTML = '<option value="">Select...</option>';
-        }
-    });
-}
-
-// Clear all feature dropdowns
-function clearAllFeatures() {
-    [rootSelect, categorySelect, genderSelect, numberSelect,
-     personSelect, scriptSelect, caseSelect, tenseSelect].forEach(select => {
-        select.innerHTML = '<option value="">Select...</option>';
-        select.disabled = true;
-    });
-    checkButton.disabled = true;
-    showAnswerButton.disabled = true;
-}
-
-function allFeaturesSelected() {
-    return [rootSelect, categorySelect, genderSelect, numberSelect,
-            personSelect, scriptSelect, caseSelect, tenseSelect]
-            .every(select => select.value && select.value !== '');
-}
-
-document.querySelectorAll('select').forEach(select => {
-    select.addEventListener('change', () => {
-        checkButton.disabled = !allFeaturesSelected();
-    });
-});
-
-// Event Handlers
-function handleLanguageChange() {
-    const selectedLang = languageSelect.value;
-    console.log('Language dropdown value:', selectedLang);
-    console.log('Language dropdown selected option:', languageSelect.options[languageSelect.selectedIndex].text);
-    
-    if (!selectedLang) {
-        console.log('No language selected, clearing word select');
-        wordSelect.innerHTML = '<option value="">Select a word...</option>';
-        wordSelect.disabled = true;
-        clearAllFeatures();
-        clearFeedback();
-        return;
-    }
-
-    // Debug log for wordData before getting words
-    console.log('Current wordData contents:', {
-        size: wordFeatures.wordData.size,
-        languages: Array.from(wordFeatures.wordData.values()).map(info => info.language),
-        sampleWords: Array.from(wordFeatures.wordData.entries()).slice(0, 5)
-    });
-    
-    const words = wordFeatures.getWordsForLanguage(selectedLang);
-    console.log(`Getting words for language "${selectedLang}" (type: ${typeof selectedLang})`);
-    console.log('Found words:', words);
-    
-    // Clear and populate word select
-    wordSelect.innerHTML = '<option value="">Select a word...</option>';
-    words.forEach(word => {
-        const option = document.createElement('option');
-        option.value = word;
-        option.textContent = word;
-        wordSelect.appendChild(option);
-        console.log(`Added word option: "${word}" for language "${selectedLang}"`);
-    });
-    
-    wordSelect.disabled = false;
-    clearAllFeatures();
-    clearFeedback();
-}
-
-// Handle word change event
-function handleWordChange() {
-    const selectedWord = wordSelect.value;
-    console.log('Word changed to:', selectedWord);
-    
-    if (!selectedWord) {
-        console.log('No word selected, clearing features');
-        clearAllFeatures();
-        clearFeedback();
-        return;
-    }
-
-    // Get word info and verify language
-    const wordInfo = wordFeatures.wordData.get(selectedWord);
-    console.log('Word data from store:', wordInfo);
-    
-    if (!wordInfo) {
-        console.error('No word info found in data store for:', selectedWord);
-        return;
-    }
-
-    const language = wordInfo.language;
-    console.log('Word language:', language);
-    
-    wordFeatures.currentWord = selectedWord;
-    const options = wordFeatures.getFeatureOptions(selectedWord);
-    
-    if (!options) {
-        console.error('No feature options returned for word:', selectedWord);
-        return;
-    }
-
-    console.log('Feature options:', options);
-    console.log('Populating dropdowns with options');
-
-    // Populate dropdowns
-    try {
-        setDropdownOptions(rootSelect, options.root, 'Select root...', false);
-        setDropdownOptions(categorySelect, options.category);
-        setDropdownOptions(genderSelect, options.gender, 'Select...', true);
-        setDropdownOptions(numberSelect, options.number, 'Select...', true);
-        setDropdownOptions(personSelect, options.person, 'Select...', true);
-        setDropdownOptions(scriptSelect, options.script, 'Select...', true);
-        setDropdownOptions(caseSelect, options.case, 'Select...', true);
-        setDropdownOptions(tenseSelect, options.tense, 'Select...', true);
-        
-        console.log('Successfully populated all dropdowns');
-    } catch (error) {
-        console.error('Error populating dropdowns:', error);
-    }
-
-    // Enable dropdowns and buttons
-    console.log('Enabling feature dropdowns and buttons');
-    enableFeatureDropdowns(true);
-    checkButton.disabled = false;
-    showAnswerButton.disabled = false;
-
-    // This ensures Person, Script, and Tense are always blank by default.
-}
-
-function handleFeatureChange() {
-    clearFeedback();
-    checkButton.disabled = !allFeaturesSelected();
-}
-
-// Update handleCheckAnswer to highlight incorrect answers
-function handleCheckAnswer() {
-    if (!allFeaturesSelected()) {
-        showFeedback('Please select all features', 'error');
-        return;
-    }
-    const selections = {
-        root: rootSelect.value,
-        category: categorySelect.value,
-        gender: genderSelect.value,
-        number: numberSelect.value,
-        person: personSelect.value,
-        script: scriptSelect.value,
-        case: caseSelect.value,
-        tense: tenseSelect.value
-    };
-    const wordInfo = wordFeatures.wordData.get(wordFeatures.currentWord);
-    const correctFeatures = wordInfo.features[0];
-    const isCorrect = wordFeatures.validateSelection(
-        languageSelect.value,
-        wordFeatures.currentWord,
-        selections
-    );
-    highlightIncorrectDropdowns(selections, correctFeatures);
-    if (isCorrect) {
-        showFeedback('✅ Correct! All features match.', 'success');
-    } else {
-        showFeedback('❌ Some features are incorrect. Try again or use Show Answer to learn the correct features.', 'error');
-    }
-}
-
-// Update handleShowAnswer to highlight incorrect answers
-function handleShowAnswer() {
-    if (!wordFeatures.currentWord) return;
-    const wordInfo = wordFeatures.wordData.get(wordFeatures.currentWord);
-    if (!wordInfo) return;
-    const correctFeatures = wordInfo.features[0];
-    answerContainer.innerHTML = `
-        <h3>Correct Features for "${wordFeatures.currentWord}":</h3>
-        <div><strong>Root:</strong> ${normalizeValue(correctFeatures.root)}</div>
-        <div><strong>Category:</strong> ${normalizeValue(correctFeatures.category)}</div>
-        <div><strong>Gender:</strong> ${normalizeValue(correctFeatures.gender)}</div>
-        <div><strong>Number:</strong> ${normalizeValue(correctFeatures.number)}</div>
-        <div><strong>Person:</strong> ${normalizeValue(correctFeatures.person)}</div>
-        <div><strong>Script:</strong> ${normalizeValue(correctFeatures.script)}</div>
-        <div><strong>Case:</strong> ${normalizeValue(correctFeatures.case)}</div>
-        <div><strong>Tense:</strong> ${normalizeValue(correctFeatures.tense)}</div>
-    `;
-    // Highlight incorrect dropdowns
-    const selections = {
-        root: rootSelect.value,
-        category: categorySelect.value,
-        gender: genderSelect.value,
-        number: numberSelect.value,
-        person: personSelect.value,
-        script: scriptSelect.value,
-        case: caseSelect.value,
-        tense: tenseSelect.value
-    };
-    highlightIncorrectDropdowns(selections, correctFeatures);
-}
-
-function handleReset() {
-    languageSelect.selectedIndex = 0;
-    wordSelect.innerHTML = '<option value="">Select a word...</option>';
-    wordSelect.disabled = true;
-    clearAllFeatures();
-    clearFeedback();
-    wordFeatures.clearSelections();
-}
-
-// Toggle instructions panel
+// Setup instructions panel
 function setupInstructionsPanel() {
     const instructionsTab = document.getElementById('instructionsTab');
     const instructionsContent = document.getElementById('instructionsContent');
@@ -639,34 +659,5 @@ function setupInstructionsPanel() {
     }
 }
 
-// Initialize simulation
-async function initSimulation() {
-    // Load features data
-    const loaded = await wordFeatures.loadFeatures();
-    if (!loaded) {
-        showFeedback('Error loading word features. Please refresh the page.', 'error');
-        return;
-    }
-
-    // Setup event listeners
-    languageSelect.addEventListener('change', handleLanguageChange);
-    wordSelect.addEventListener('change', handleWordChange);
-    
-    [rootSelect, categorySelect, genderSelect, numberSelect,
-     personSelect, scriptSelect, caseSelect, tenseSelect].forEach(select => {
-        select.addEventListener('change', handleFeatureChange);
-    });
-    
-    checkButton.addEventListener('click', handleCheckAnswer);
-    showAnswerButton.addEventListener('click', handleShowAnswer);
-    resetButton.addEventListener('click', handleReset);
-    
-    // Setup instructions panel
-    setupInstructionsPanel();
-    
-    // Initialize UI state
-    handleLanguageChange();
-}
-
-// Start simulation when DOM is loaded
-document.addEventListener('DOMContentLoaded', initSimulation);
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeApp);

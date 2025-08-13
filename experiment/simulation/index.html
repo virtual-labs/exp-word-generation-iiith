@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morphological Analysis Simulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="simulation-container">
         <div class="main-content">
-            <!-- Instructions Panel (full-width, above columns) -->
+            <!-- Instructions Panel -->
             <div class="instructions-bar">
                 <div class="instructions-header clickable" id="instructionsTab">
                     <h3>Instructions</h3>
@@ -17,101 +21,67 @@
                 </div>
                 <div id="instructionsContent" class="instructions-content collapsed">
                     <ul class="instructions-list">
-                        <li><strong>Step 1:</strong> Select a language (English or Hindi) and choose a word to analyze.</li>
-                        <li><strong>Step 2:</strong> Select the correct morphological features for the chosen word:
+                        <li><strong>Step 1:</strong> Select a root word from the dropdown menu.</li>
+                        <li><strong>Step 2:</strong> Study the paradigm table showing different word forms.</li>
+                        <li><strong>Step 3:</strong> Complete the Add-Delete table by selecting the correct morphological transformations:
                             <ul style="margin-left: 1.5em; margin-top: 0.3em;">
-                                <li><strong>Root:</strong> Base form • <strong>Category:</strong> Part of speech • <strong>Gender:</strong> Masculine/Feminine/Neuter</li>
-                                <li><strong>Number:</strong> Singular/Plural • <strong>Person:</strong> 1st/2nd/3rd • <strong>Script:</strong> Roman/Devanagari</li>
-                                <li><strong>Case:</strong> Direct/Oblique • <strong>Tense:</strong> Present/Past/Future</li>
+                                <li><strong>Delete:</strong> What to remove from the root word</li>
+                                <li><strong>Add:</strong> What to add to create the new form</li>
+                                <li><strong>Number:</strong> Singular (sing) or Plural (plu)</li>
+                                <li><strong>Case:</strong> Direct (dr) or Oblique (ob)</li>
                             </ul>
                         </li>
-                        <li><strong>Step 3:</strong> Click <strong>Check Answer</strong> to verify (incorrect features highlighted in red) or <strong>Show Answer</strong> to see correct features.</li>
-                        <li><strong>Note:</strong> Use <em>N/A</em> for non-applicable features. All dropdowns must be filled to check your answer.</li>
+                        <li><strong>Step 4:</strong> Click <strong>Submit</strong> to check your answers or <strong>Get Answer</strong> to see the correct transformations.</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Three-column layout -->
             <div class="three-pane-layout">
-                <!-- Pane 1: Language and Word Selection -->
+                <!-- Pane 1: Root Selection -->
                 <div class="pane pane-1">
                     <div class="pane-header">
-                        <h3>Start your word generation by selecting a language and a word</h3>
-                        <i class="fas fa-info-circle" title="First, choose your preferred language. Then select a word to generate its different forms."></i>
+                        <h3>Select Root Word</h3>
+                        <i class="fas fa-info-circle" title="Choose a Hindi root word to analyze"></i>
                     </div>
                     <div class="selection-block">
                         <div class="form-group">
-                            <label for="language">Language</label>
-                            <select id="language" class="form-select">
-                                <option value="">Select language...</option>
-                                <option value="en">English</option>
-                                <option value="hi">Hindi</option>
+                            <label for="rootSelection">Root Word</label>
+                            <select id="rootSelection" class="form-select">
+                                <option value="">Select a root word...</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="word">Word</label>
-                            <select id="word" class="form-select" disabled>
-                                <option value="">Select a word...</option>
-                            </select>
-                        </div>
+                    </div>
+                    
+                    <!-- Paradigm Display Section -->
+                    <div id="paradigmSection" class="paradigm-section" style="display: none;">
+                        <h4>Word Forms (Paradigm)</h4>
+                        <div id="paradigmTable"></div>
                     </div>
                 </div>
 
-                <!-- Pane 2: Feature Selection -->
+                <!-- Pane 2: Add-Delete Table -->
                 <div class="pane pane-2">
                     <div class="pane-header">
-                        <h3>Select the correct morphological features</h3>
-                        <i class="fas fa-info-circle" title="Choose the features to generate the desired word form"></i>
+                        <h3>Fill the Add-Delete Table</h3>
+                        <i class="fas fa-info-circle" title="Complete the morphological transformations"></i>
                     </div>
-                    <div class="features-grid">
-                        <div class="feature-group">
-                            <label for="root">Root <i class="fas fa-info-circle" title="Base form of the word"></i></label>
-                            <select id="root" class="form-select" disabled>
-                                <option value="">Select root...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="category">Category <i class="fas fa-info-circle" title="Grammatical category of the word"></i></label>
-                            <select id="category" class="form-select" disabled>
-                                <option value="">Select category...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="gender">Gender <i class="fas fa-info-circle" title="Grammatical gender"></i></label>
-                            <select id="gender" class="form-select" disabled>
-                                <option value="">Select gender...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="number">Number <i class="fas fa-info-circle" title="Singular or plural"></i></label>
-                            <select id="number" class="form-select" disabled>
-                                <option value="">Select number...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="person">Person <i class="fas fa-info-circle" title="First, second, or third person"></i></label>
-                            <select id="person" class="form-select" disabled>
-                                <option value="">Select person...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="script">Script <i class="fas fa-info-circle" title="Writing system"></i></label>
-                            <select id="script" class="form-select" disabled>
-                                <option value="">Select script...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="case">Case <i class="fas fa-info-circle" title="Grammatical case"></i></label>
-                            <select id="case" class="form-select" disabled>
-                                <option value="">Select case...</option>
-                            </select>
-                        </div>
-                        <div class="feature-group">
-                            <label for="tense">Tense <i class="fas fa-info-circle" title="Verb tense"></i></label>
-                            <select id="tense" class="form-select" disabled>
-                                <option value="">Select tense...</option>
-                            </select>
-                        </div>
+                    
+                    <div id="addDeleteSection" class="add-delete-section" style="display: none;">
+                        <table class="add-delete-table">
+                            <thead>
+                                <tr>
+                                    <th>Delete</th>
+                                    <th>Add</th>
+                                    <th>Number</th>
+                                    <th>Case</th>
+                                    <th id="checkHeader">Check</th>
+                                </tr>
+                            </thead>
+                            <tbody id="addDeleteTableBody">
+                                <!-- Dynamic content will be inserted here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -119,25 +89,33 @@
                 <div class="pane pane-3">
                     <div class="pane-header">
                         <h3>Check and Learn</h3>
-                        <i class="fas fa-info-circle" title="Verify your selections and learn the correct features"></i>
+                        <i class="fas fa-info-circle" title="Verify your answers and learn"></i>
                     </div>
+                    
+                    <!-- Control Buttons -->
                     <div class="button-group">
-                        <button id="checkButton" class="primary-button" disabled>
-                            <i class="fas fa-check"></i> Check Answer
+                        <button id="submitButton" class="primary-button" disabled>
+                            <i class="fas fa-check"></i> Submit
                         </button>
-                        <button id="showAnswerButton" class="secondary-button" disabled>
-                            <i class="fas fa-eye"></i> Show Answer
+                        <button id="getAnswerButton" class="secondary-button" style="display: none;">
+                            <i class="fas fa-eye"></i> Get Answer
                         </button>
-                        <button id="resetButton">
+                        <button id="resetButton" class="secondary-button">
                             <i class="fas fa-undo"></i> Reset
                         </button>
                     </div>
+
+                    <!-- Feedback Section -->
                     <div id="feedback" class="feedback-container"></div>
-                    <div id="answer" class="answer-container"></div>
+
+                    <!-- Correct Answer Display -->
+                    <div id="correctAnswer" class="answer-container"></div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script src="js/mobile-detection.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
