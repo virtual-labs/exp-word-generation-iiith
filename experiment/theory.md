@@ -1,14 +1,12 @@
-### Introduction
+Word generation is a fundamental process in computational linguistics that involves creating inflected word forms from their root forms and grammatical features. This process is the inverse of word analysis, where we start with a root word and a set of grammatical features to produce the correct surface form of the word.
 
-Morphological word generation is a fundamental process in computational linguistics that involves creating inflected word forms from their root forms and grammatical features. This process is the inverse of morphological analysis, where we start with a root word and a set of grammatical features to produce the correct surface form of the word.
+### What is Word Generation?
 
-### What is Morphological Generation?
-
-Morphological generation is the computational process of producing word forms by combining:
+Word generation is the computational process of producing word forms by combining:
 - A **root** (base form of the word)
 - **Grammatical features** (such as tense, number, gender, case, person, etc.)
 
-The system applies morphological rules to transform the root into the appropriate inflected form based on the specified features.
+The system applies linguistic rules to transform the root into the appropriate inflected form based on the specified features.
 
 #### Basic Example
 ```
@@ -19,7 +17,7 @@ Output: "played"
 ### Core Components
 
 #### 1. Root (rt)
-The root is the base lexical form of a word, typically the uninflected form that carries the core meaning. It serves as the foundation upon which morphological operations are applied.
+The root is the base lexical form of a word, typically the uninflected form that carries the core meaning. It serves as the foundation upon which word generation operations are applied.
 
 **Examples:**
 - English: "play", "boy", "run", "child"
@@ -88,10 +86,10 @@ Output: children
 Explanation: Irregular plural that doesn't follow standard "-s" rule
 ```
 
-### Morphological Rules and Patterns
+### Word Generation Rules and Patterns
 
 #### Regular Patterns
-Most languages have systematic rules for morphological generation:
+Most languages have systematic rules for word generation:
 
 ##### English Regular Patterns:
 - **Plural nouns**: Add "-s" (cat → cats)
@@ -116,7 +114,7 @@ Languages also contain exceptions that must be handled specially:
 
 ### Feature Interactions
 
-Morphological features don't work in isolation; they interact with each other in complex ways:
+Grammatical features don't work in isolation; they interact with each other in complex ways:
 
 #### Gender-Number Interaction (Hindi)
 ```
@@ -138,7 +136,7 @@ Present: I play, you play, he plays, we play, they play
 Past: I played, you played, he played, we played, they played
 ```
 
-### Morphological Analysis vs. Generation
+### Word Analysis vs. Generation
 
 #### Analysis (Decomposition)
 - **Input**: Inflected word form
@@ -152,12 +150,12 @@ Past: I played, you played, he played, we played, they played
 - **Example**: root=play, tense=past → "played"
 - **Advantages**: More deterministic process
 
-### Determinism in Morphological Generation
+### Determinism in Word Generation
 
 #### Why Generation is More Deterministic
 
 1. **Unique Output**: Given a root and specific features, there's typically one correct output
-2. **Rule-Based**: Generation follows systematic morphological rules
+2. **Rule-Based**: Generation follows systematic linguistic rules
 3. **Predictable**: The same input always produces the same output
 
 #### Example of Deterministic Generation:
@@ -199,11 +197,11 @@ Generation can exhibit non-determinism when:
 - **Challenge**: Different languages have different feature sets
 - **Solution**: Language-specific rule systems and feature inventories
 
-#### 4. Morphophonological Changes
-- **Challenge**: Sound changes during morphological processes
+#### 4. Sound Changes During Generation
+- **Challenge**: Sound changes during word formation processes
 - **Example**: "try" + "-ed" → "tried" (not "tryed")
 
-### Applications of Morphological Generation
+### Applications of Word Generation
 
 #### 1. Natural Language Generation (NLG)
 - Generating grammatically correct text
@@ -211,7 +209,7 @@ Generation can exhibit non-determinism when:
 
 #### 2. Machine Translation
 - Producing correct target language forms
-- Handling morphological differences between languages
+- Handling word formation differences between languages
 
 #### 3. Language Learning Tools
 - Generating practice exercises
@@ -223,7 +221,7 @@ Generation can exhibit non-determinism when:
 
 ### Advanced Concepts
 
-#### 1. Paradigms
+#### 1. Word Paradigms
 A paradigm is the complete set of inflected forms for a word:
 
 ##### English Verb Paradigm (play):
@@ -238,14 +236,14 @@ A paradigm is the complete set of inflected forms for a word:
 - Oblique singular: लड़के
 - Oblique plural: लड़कों
 
-#### 2. Morphological Productivity
-Some morphological processes are more productive than others:
+#### 2. Word Formation Productivity
+Some word formation processes are more productive than others:
 
 - **Highly productive**: English "-s" plural (can be applied to new words)
 - **Less productive**: English irregular plurals (limited set)
 
 #### 3. Allomorphy
-The same morphological feature can have different surface realizations:
+The same grammatical feature can have different surface realizations:
 
 ##### English Past Tense Allomorphs:
 - "-ed" [t]: walked [wɔːkt]
@@ -254,7 +252,7 @@ The same morphological feature can have different surface realizations:
 
 ### Conclusion
 
-Morphological word generation is a complex but systematic process that combines linguistic knowledge with computational methods. Understanding the interaction between roots, features, and morphological rules is crucial for building effective natural language processing systems. The deterministic nature of generation, combined with the need to handle irregularities and cross-linguistic variation, makes this an active area of research in computational linguistics.
+Word generation is a complex but systematic process that combines linguistic knowledge with computational methods. Understanding the interaction between roots, features, and linguistic rules is crucial for building effective natural language processing systems. The deterministic nature of generation, combined with the need to handle irregularities and cross-linguistic variation, makes this an active area of research in computational linguistics.
 
-The simulation you will interact with demonstrates these concepts by allowing you to explore how different combinations of roots and features produce various word forms in both English and Hindi, highlighting the similarities and differences between these morphological systems.
+The simulation you will interact with demonstrates these concepts by allowing you to explore how different combinations of roots and features produce various word forms in both English and Hindi, highlighting the similarities and differences between these word formation systems.
 
