@@ -1,0 +1,8 @@
+
+/home/runner/work/exp-word-generation-iiith/exp-word-generation-iiith/experiment/simulation/js/main.js
+   12:1   warning  'ga' is not defined                   no-undef
+   13:1   warning  'ga' is not defined                   no-undef
+  643:17  warning  'updateDropdownColor' is not defined  no-undef
+
+✖ 3 problems (0 errors, 3 warnings)
+
