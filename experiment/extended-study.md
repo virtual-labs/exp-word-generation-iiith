@@ -1,29 +1,29 @@
-# Extended Learning Resources
+### Extended Learning Resources
 
-## Advanced Topics in Word Generation
+#### Advanced Topics in Word Generation
 
-### 1. Morphological Analysis Techniques
+##### 1. Morphological Analysis Techniques
 - **Rule-Based Systems**: Study how formal grammar rules can be used to generate word forms
 - **Machine Learning Approaches**: Learn about neural models for morphological generation
 - **Finite State Transducers**: Understand how FSTs model word formation processes
 
-### 2. Cross-Linguistic Studies
+##### 2. Cross-Linguistic Studies
 - Compare morphological systems across language families
 - Study universal patterns in word formation
 - Analyze language-specific challenges in word generation
 
-### 3. Computational Morphology
+##### 3. Computational Morphology
 - Morphological parsing algorithms
 - Implementation of word generators
 - Handling ambiguity in word generation
 
-## Research Papers
+#### Research Papers
 
 1. "Morphological Analysis and Generation: A First-Step Towards a New Design" (ACL Digital Library)
 2. "Neural Morphological Analysis: Challenges and Solutions" (EMNLP Proceedings)
 3. "Cross-lingual Morphological Generation using Deep Learning" (COLING)
 
-## Online Resources
+#### Online Resources
 
 1. **Video Lectures**
    - MIT OpenCourseWare: Introduction to Computational Linguistics
@@ -40,7 +40,7 @@
    - Implementation examples in different programming languages
    - Datasets for morphological analysis
 
-## Practical Exercises
+#### Practical Exercises
 
 1. **Basic Exercises**
    - Identify morphemes in complex words
@@ -57,19 +57,19 @@
    - Study morphological patterns in specific languages
    - Analyze error patterns in word generation systems
 
-## Further Reading
+#### Further Reading
 
-### Books
+##### Books
 1. "Morphology and Computation" by Richard Sproat
 2. "Computational Morphology" by Daniel Karp
 3. "Natural Language Processing" by Daniel Jurafsky & James H. Martin (Chapter on Morphology)
 
-### Journals
+##### Journals
 1. Computational Linguistics
 2. Natural Language Engineering
 3. Journal of Language Modelling
 
-## Tools and Software
+#### Tools and Software
 
 1. **Analysis Tools**
    - NLTK Morphological Analysis Tools

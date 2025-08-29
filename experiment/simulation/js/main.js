@@ -97,13 +97,14 @@ class MorphologyAnalyzer {
             if (parts.length >= 10) {
                 const paradigmId = parts[0];
                 const rootWord = parts[1];
-                // Ensure all transformations are properly trimmed
-                const transformations = parts.slice(2, 10).map(t => t.trim());
+                const tokens = parts.slice(2, 10).map(t => t.trim());
+                const deletes = tokens.slice(0, 4);
+                const adds = tokens.slice(4, 8);
                 this.paradigmData.set(paradigmId, {
                     root: rootWord,
-                    transformations: transformations
+                    transformations: { deletes, adds }
                 });
-                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", transformations=`, transformations);
+                console.log(`Added paradigm ${paradigmId}: root="${rootWord}", deletes=`, deletes, 'adds=', adds);
             } else {
                 console.warn(`Line ${lineIndex + 1} has insufficient parts (${parts.length}):`, parts);
             }
@@ -132,7 +133,7 @@ class MorphologyAnalyzer {
         
         if (paradigmId) {
             const paradigm = this.paradigmData.get(paradigmId);
-            console.log(`Found paradigm:`, paradigm);
+            console.log('Found paradigm:', paradigm);
             return paradigm;
         }
         return null;
@@ -143,53 +144,47 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return null;
 
+        const deletes = paradigm.transformations.deletes;
+        const adds = paradigm.transformations.adds;
+
         const forms = [
-            { number: 'singular', case: 'direct', transformIndex: 0 },
-            { number: 'singular', case: 'oblique', transformIndex: 1 },
-            { number: 'plural', case: 'direct', transformIndex: 2 },
-            { number: 'plural', case: 'oblique', transformIndex: 3 }
+            { number: 'singular', case: 'direct', index: 0 },
+            { number: 'singular', case: 'oblique', index: 1 },
+            { number: 'plural', case: 'direct', index: 2 },
+            { number: 'plural', case: 'oblique', index: 3 }
         ];
 
         return forms.map(form => ({
-            word: this.generateWordForm(rootWord, paradigm.transformations[form.transformIndex]),
+            word: this.applyDeleteAdd(rootWord, deletes[form.index], adds[form.index]),
             root: rootWord,
             number: form.number,
             case: form.case,
-            transformation: paradigm.transformations[form.transformIndex]
+            transformation: { del: deletes[form.index], add: adds[form.index] }
         }));
     }
 
-    // Generate word form by applying suffix transformation
-    generateWordForm(root, transformation) {
-        // For Hindi morphology, we need to handle different transformation patterns
-        console.log(`Generating word form: root="${root}", transformation="${transformation}"`);
+    // Apply delete + add to form the target word
+    applyDeleteAdd(root, delSuffix, addSuffix) {
+        console.log(`Generating word form: root="${root}", delete="${delSuffix}", add="${addSuffix}"`);
         
-        // Handle special cases
-        if (!transformation || transformation === '' || transformation === ' ' || transformation === '(none)') {
-            console.log('No transformation needed, returning root');
-            return root;
+        let base = root;
+        
+        // If delete suffix is specified and exists at the end of the root
+        if (delSuffix && root.endsWith(delSuffix)) {
+            base = root.slice(0, root.length - delSuffix.length);
+            console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${base}"`);
+        } else if (delSuffix) {
+            console.log(`Delete suffix "${delSuffix}" not found at end of "${root}". Leaving root unchanged.`);
         }
-        
-        // If transformation is same as root ending, no change needed
-        const lastChar = root.slice(-1);
-        console.log(`Last char of root: "${lastChar}"`);
-        
-        if (transformation === lastChar) {
-            console.log('Transformation matches last char, returning root');
-            return root;
+
+        // If add suffix is specified, append it
+        if (addSuffix) {
+            const result = base + addSuffix;
+            console.log(`Added suffix "${addSuffix}": "${base}" -> "${result}"`);
+            return result;
         }
-        
-        // For most Hindi words, replace the last character with the transformation
-        if (transformation !== 'आ') {
-        const baseRoot = root.slice(0, -1);
-            const newForm = baseRoot + transformation;
-            console.log(`Transformed: "${root}" -> "${newForm}" (base: "${baseRoot}", suffix: "${transformation}")`);
-            return newForm;
-        }
-        
-        // If transformation is 'आ', return root as is
-        console.log('Transformation is आ, returning root');
-        return root;
+
+        return base;
     }
 
     // Get correct answers for current paradigm
@@ -197,18 +192,16 @@ class MorphologyAnalyzer {
         const paradigm = this.getParadigm(rootWord);
         if (!paradigm) return [];
 
-        // Return the transformations as correct answers
-        // Format: [del_sing_dr, del_plu_dr, del_sing_ob, del_plu_ob, add_sing_dr, add_plu_dr, add_sing_ob, add_plu_ob]
-        const transformations = paradigm.transformations;
+        const { deletes, adds } = paradigm.transformations;
         return [
-            transformations[0], // delete singular direct
-            transformations[2], // delete plural direct  
-            transformations[1], // delete singular oblique
-            transformations[3], // delete plural oblique
-            transformations[0], // add singular direct
-            transformations[2], // add plural direct
-            transformations[1], // add singular oblique
-            transformations[3]  // add plural oblique
+            deletes[0], // delete singular direct
+            deletes[1], // delete singular oblique
+            deletes[2], // delete plural direct
+            deletes[3], // delete plural oblique
+            adds[0],    // add singular direct
+            adds[1],    // add singular oblique
+            adds[2],    // add plural direct
+            adds[3]     // add plural oblique
         ];
     }
 
@@ -381,8 +374,8 @@ function showParadigmTable(rootWord) {
 function showAddDeleteTable() {
     const categories = [
         { number: 'sing', case: 'dr', label: 'Singular Direct', fullNumber: 'Singular', fullCase: 'Direct' },
-        { number: 'plu', case: 'dr', label: 'Plural Direct', fullNumber: 'Plural', fullCase: 'Direct' },
         { number: 'sing', case: 'ob', label: 'Singular Oblique', fullNumber: 'Singular', fullCase: 'Oblique' },
+        { number: 'plu', case: 'dr', label: 'Plural Direct', fullNumber: 'Plural', fullCase: 'Direct' },
         { number: 'plu', case: 'ob', label: 'Plural Oblique', fullNumber: 'Plural', fullCase: 'Oblique' }
     ];
 
@@ -434,12 +427,12 @@ function handleSubmit() {
     // Collect user answers
     const userAnswers = [
         document.getElementById('delsingdr').value,
-        document.getElementById('delpludr').value,
         document.getElementById('delsingob').value,
+        document.getElementById('delpludr').value,
         document.getElementById('delpluob').value,
         document.getElementById('addsingdr').value,
-        document.getElementById('addpludr').value,
         document.getElementById('addsingob').value,
+        document.getElementById('addpludr').value,
         document.getElementById('addpluob').value
     ];
 
@@ -472,15 +465,15 @@ function updateCheckResults(results) {
     // Get all select elements
     const deleteSelects = [
         document.getElementById('delsingdr'),
-        document.getElementById('delpludr'),
         document.getElementById('delsingob'),
+        document.getElementById('delpludr'),
         document.getElementById('delpluob')
     ];
     
     const addSelects = [
         document.getElementById('addsingdr'),
-        document.getElementById('addpludr'),
         document.getElementById('addsingob'),
+        document.getElementById('addpludr'),
         document.getElementById('addpluob')
     ];
     
@@ -535,8 +528,8 @@ function showCorrectAnswers() {
 
     const categories = [
         { number: 'Singular', case: 'Direct' },
-        { number: 'Plural', case: 'Direct' },
         { number: 'Singular', case: 'Oblique' },
+        { number: 'Plural', case: 'Direct' },
         { number: 'Plural', case: 'Oblique' }
     ];
 
@@ -626,6 +619,31 @@ function setupEventListeners() {
     submitButton.addEventListener('click', handleSubmit);
     getAnswerButton.addEventListener('click', showCorrectAnswers);
     resetButton.addEventListener('click', resetSimulation);
+
+    // Get all select elements
+    const deleteSelects = [
+        document.getElementById('delsingdr'),
+        document.getElementById('delsingob'),
+        document.getElementById('delpludr'),
+        document.getElementById('delpluob')
+    ];
+    
+    const addSelects = [
+        document.getElementById('addsingdr'),
+        document.getElementById('addsingob'),
+        document.getElementById('addpludr'),
+        document.getElementById('addpluob')
+    ];
+    
+    // Add change event listeners to all dropdowns
+    [...deleteSelects, ...addSelects].forEach((select, index) => {
+        if (select) {
+            select.addEventListener('change', () => {
+                // Update dropdown color based on selection
+                updateDropdownColor(select, index);
+            });
+        }
+    });
 }
 
 // Setup instructions panel
