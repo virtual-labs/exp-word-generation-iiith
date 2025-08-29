@@ -1,4 +1,4 @@
-# Fun Facts About Word Generation
+### Fun Facts About Word Generation
 
 1. **Morphological Complexity**: Did you know that some languages can generate thousands of different word forms from a single root? For example, Turkish verbs can have over 40,000 possible forms due to its rich morphological system!
 

@@ -1,14 +1,14 @@
-# Word Generation Assignment
+### Word Generation Assignment
 
 This assignment will test your understanding of word generation principles and your ability to apply them across different languages and grammatical features.
 
 ---
 
-## **Assignment 1: Hindi Word Generation**
+#### **Assignment 1: Hindi Word Generation**
 
 Complete the word generation table for the following Hindi words. For each word, generate the appropriate forms based on the given features:
 
-### **Word**: लड़का (laDkaa) - "boy"
+##### **Word**: लड़का (laDkaa) - "boy"
 **Root**: लड़क **Category**: noun **Gender**: male
 
 | Number | Case | Generated Form | Explanation |
@@ -18,7 +18,7 @@ Complete the word generation table for the following Hindi words. For each word,
 | plural | direct | लड़के | Delete आ, add ए |
 | plural | oblique | लड़कों | Delete आ, add ओं |
 
-### **Word**: पुस्तक (pustak) - "book"
+##### **Word**: पुस्तक (pustak) - "book"
 **Root**: पुस्तक **Category**: noun **Gender**: female
 
 | Number | Case | Generated Form | Explanation |
@@ -28,7 +28,7 @@ Complete the word generation table for the following Hindi words. For each word,
 | plural | direct | पुस्तकें | Add एं for feminine plural |
 | plural | oblique | पुस्तकों | Add ओं for oblique plural |
 
-### **Word**: बाग (bAg) - "garden"
+##### **Word**: बाग (bAg) - "garden"
 **Root**: बाग **Category**: noun **Gender**: male
 
 | Number | Case | Generated Form | Explanation |
@@ -40,11 +40,11 @@ Complete the word generation table for the following Hindi words. For each word,
 
 ---
 
-## **Assignment 2: English Word Generation**
+#### **Assignment 2: English Word Generation**
 
 Generate the appropriate word forms for the following English words based on the specified features:
 
-### **Word**: "play" (verb)
+##### **Word**: "play" (verb)
 **Root**: play **Category**: verb
 
 | Tense | Person | Number | Generated Form | Explanation |
@@ -54,7 +54,7 @@ Generate the appropriate word forms for the following English words based on the
 | past | any | any | played | Add -ed for past tense |
 | present participle | any | any | playing | Add -ing for present participle |
 
-### **Word**: "boy" (noun)
+##### **Word**: "boy" (noun)
 **Root**: boy **Category**: noun
 
 | Number | Generated Form | Explanation |
@@ -62,7 +62,7 @@ Generate the appropriate word forms for the following English words based on the
 | singular | boy | Base form |
 | plural | boys | Add -s for plural |
 
-### **Word**: "happy" (adjective)
+##### **Word**: "happy" (adjective)
 **Root**: happy **Category**: adjective
 
 | Degree | Generated Form | Explanation |
@@ -73,11 +73,11 @@ Generate the appropriate word forms for the following English words based on the
 
 ---
 
-## **Assignment 3: Cross-Linguistic Word Generation**
+#### **Assignment 3: Cross-Linguistic Word Generation**
 
 Compare word generation patterns between English and Hindi for the same concepts:
 
-### **Task A: Plural Formation**
+##### **Task A: Plural Formation**
 Generate plural forms for the following words in both languages:
 
 | Concept | English Root | English Plural | Hindi Root | Hindi Plural |
@@ -86,7 +86,7 @@ Generate plural forms for the following words in both languages:
 | Book | book | books | पुस्तक | पुस्तकें |
 | House | house | houses | घर | घर |
 
-### **Task B: Verb Conjugation**
+##### **Task B: Verb Conjugation**
 Generate present tense forms for the verb "to play" in both languages:
 
 | Person | English | Hindi |
@@ -97,9 +97,9 @@ Generate present tense forms for the verb "to play" in both languages:
 
 ---
 
-## **Assignment 4: Advanced Word Generation**
+#### **Assignment 4: Advanced Word Generation**
 
-### **Task A: Feature Combination**
+##### **Task A: Feature Combination**
 Given the root "लिख" (likh - "write"), generate all possible forms by combining different features:
 
 | Gender | Number | Person | Tense | Generated Form |
@@ -109,7 +109,7 @@ Given the root "लिख" (likh - "write"), generate all possible forms by comb
 | masculine | plural | 1st | present | लिखते |
 | feminine | plural | 1st | present | लिखतीं |
 
-### **Task B: Irregular Patterns**
+##### **Task B: Irregular Patterns**
 Identify and explain irregular word generation patterns:
 
 1. **English Irregular Plurals**: Why does "child" become "children" instead of "childs"?
@@ -117,9 +117,9 @@ Identify and explain irregular word generation patterns:
 
 ---
 
-## **Assignment 5: Practical Application**
+#### **Assignment 5: Practical Application**
 
-### **Task A: Sentence Generation**
+##### **Task A: Sentence Generation**
 Generate grammatically correct sentences using the words you've created:
 
 **English Example**: "The boys are playing in the garden."
@@ -128,7 +128,7 @@ Generate grammatically correct sentences using the words you've created:
 **Hindi Example**: "लड़के बाग में खेल रहे हैं।"
 - Generated words: लड़के (plural of लड़का), खेल रहे (present continuous of खेल)
 
-### **Task B: Error Analysis**
+##### **Task B: Error Analysis**
 Identify and correct the following word generation errors:
 
 1. **English**: "I plays football" → Should be "I play football"
@@ -136,7 +136,7 @@ Identify and correct the following word generation errors:
 
 ---
 
-## **Submission Guidelines**
+#### **Submission Guidelines**
 
 1. **Complete all assignments** with detailed explanations
 2. **Show your work** - explain the generation process step by step
