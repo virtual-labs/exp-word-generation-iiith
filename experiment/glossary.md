@@ -1,5 +1,3 @@
-### Glossary of Word Generation Terms
-
 #### A
 
 **Affix**: A morpheme that attaches to a word stem to form a new word or word form.
@@ -76,4 +74,4 @@
 
 **Word Form**: A specific form of a word used in a particular grammatical context.
 
-**Word Generation**: The process of creating different forms of a word based on grammatical rules. 
+**Word Generation**: The process of creating different forms of a word based on grammatical rules.
