@@ -3,19 +3,19 @@
 
 class MobileDetection {
   constructor() {
-    console.log('MobileDetection constructor called');
+    //console.log('MobileDetection constructor called');
     this.isMobile = this.detectMobile();
     this.overlayShown = false;
-    console.log('MobileDetection initialized, isMobile:', this.isMobile);
+    //console.log('MobileDetection initialized, isMobile:', this.isMobile);
     this.init();
   }
 
   detectMobile() {
-    console.log('detectMobile() called');
-    
+    console.log("detectMobile() called");
+
     // Check for mobile user agents
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    
+
     // Mobile device patterns
     const mobilePatterns = [
       /Android/i,
@@ -27,56 +27,59 @@ class MobileDetection {
       /Windows Phone/i,
       /Opera Mini/i,
       /IEMobile/i,
-      /Mobile/i
+      /Mobile/i,
     ];
 
     // Check screen size (primary check)
     const isSmallScreen = window.innerWidth <= 1200; // Lower threshold for testing
-    
+
     // Check touch capability
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
     // Return true if any mobile pattern matches OR if it's a small screen
-    const result = mobilePatterns.some(pattern => pattern.test(userAgent)) || isSmallScreen;
-    
+    const result =
+      mobilePatterns.some((pattern) => pattern.test(userAgent)) ||
+      isSmallScreen;
+
     // Debug logging
-    console.log('Mobile Detection Debug:', {
+    /* console.log('Mobile Detection Debug:', {
       userAgent: userAgent,
       isSmallScreen: isSmallScreen,
       isTouchDevice: isTouchDevice,
       result: result,
       windowWidth: window.innerWidth,
       windowHeight: window.innerHeight
-    });
-    
+    }); */
+
     return result;
   }
 
   init() {
-    console.log('init() called, isMobile:', this.isMobile, 'overlayShown:', this.overlayShown);
-    
+    //console.log('init() called, isMobile:', this.isMobile, 'overlayShown:', this.overlayShown);
+
     if (this.isMobile && !this.overlayShown) {
-      console.log('Should show overlay');
+      //console.log('Should show overlay');
       this.showOverlay();
     } else {
-      console.log('Not showing overlay');
+      console.log("Not showing overlay");
     }
   }
 
   showOverlay() {
-    console.log('showOverlay() called');
-    
+    //console.log('showOverlay() called');
+
     if (this.overlayShown) {
-      console.log('Overlay already shown, returning');
+      //console.log('Overlay already shown, returning');
       return;
     }
-    
+
     this.overlayShown = true;
-    console.log('Creating overlay...');
+    console.log("Creating overlay...");
 
     // Create overlay HTML
-    const overlay = document.createElement('div');
-    overlay.id = 'mobile-warning-overlay';
+    const overlay = document.createElement("div");
+    overlay.id = "mobile-warning-overlay";
     overlay.innerHTML = `
       <div class="mobile-overlay-backdrop">
         <div class="mobile-overlay-content">
@@ -113,90 +116,92 @@ class MobileDetection {
     `;
 
     // Add event listeners to buttons
-    overlay.addEventListener('click', (e) => {
-      if (e.target.id === 'continueBtn') {
+    overlay.addEventListener("click", (e) => {
+      if (e.target.id === "continueBtn") {
         this.continueAnyway();
-      } else if (e.target.id === 'goBackBtn') {
+      } else if (e.target.id === "goBackBtn") {
         this.goBack();
       }
     });
 
     // Add to body
     document.body.appendChild(overlay);
-    console.log('Overlay added to body');
-    
+    //console.log('Overlay added to body');
+
     // Prevent body scrolling
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   }
 
   continueAnyway() {
-    console.log('continueAnyway() called');
+    //console.log('continueAnyway() called');
     this.hideOverlay();
   }
 
   goBack() {
-    console.log('goBack() called');
+    //console.log('goBack() called');
     // Try to go back in history, or redirect to a homepage if available
     if (window.history.length > 1) {
       window.history.back();
     } else {
       // You can customize this to redirect to your main page
-      alert('Please bookmark this page and open it on a desktop computer for the best experience.');
+      alert(
+        "Please bookmark this page and open it on a desktop computer for the best experience."
+      );
     }
   }
 
   hideOverlay() {
-    console.log('hideOverlay() called');
-    const overlay = document.getElementById('mobile-warning-overlay');
+    //console.log('hideOverlay() called');
+    const overlay = document.getElementById("mobile-warning-overlay");
     if (overlay) {
-      overlay.style.animation = 'fadeOut 0.3s ease-out forwards';
+      overlay.style.animation = "fadeOut 0.3s ease-out forwards";
       setTimeout(() => {
         overlay.remove();
-        document.body.style.overflow = '';
-        console.log('Overlay removed');
+        document.body.style.overflow = "";
+        //console.log('Overlay removed');
       }, 300);
     }
   }
 }
 
 // Wait for DOM to be ready
-console.log('DOM ready state:', document.readyState);
+//console.log('DOM ready state:', document.readyState);
 
-if (document.readyState === 'loading') {
-  console.log('DOM still loading, adding event listener');
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded fired');
+if (document.readyState === "loading") {
+  //console.log('DOM still loading, adding event listener');
+  document.addEventListener("DOMContentLoaded", () => {
+    //console.log('DOMContentLoaded fired');
     initializeMobileDetection();
   });
 } else {
-  console.log('DOM already loaded, initializing immediately');
+  //console.log('DOM already loaded, initializing immediately');
   initializeMobileDetection();
 }
 
 function initializeMobileDetection() {
-  console.log('Initializing mobile detection...');
-  
+  //console.log('Initializing mobile detection...');
+
   try {
     const mobileDetection = new MobileDetection();
     window.mobileDetection = mobileDetection;
-    console.log('✓ Mobile detection initialized successfully');
-    console.log('Global object set:', window.mobileDetection);
+    //console.log('✓ Mobile detection initialized successfully');
+    //console.log('Global object set:', window.mobileDetection);
   } catch (error) {
-    console.error('✗ Error initializing mobile detection:', error);
+    console.error("✗ Error initializing mobile detection:", error);
   }
 }
 
 // Test function for debugging
-window.testMobileDetection = function() {
-  console.log('=== Manual Test ===');
-  console.log('window.mobileDetection:', window.mobileDetection);
-  
+window.testMobileDetection = function () {
+  //console.log('=== Manual Test ===');
+  //console.log('window.mobileDetection:', window.mobileDetection);
+
   if (window.mobileDetection) {
-    console.log('Testing overlay...');
+    //console.log('Testing overlay...');
     window.mobileDetection.showOverlay();
   } else {
-    console.log('Mobile detection not available');
+    console.log("Mobile detection not available");
   }
 };
 
-console.log('=== Mobile Detection Script Loaded ==='); 
+//console.log('=== Mobile Detection Script Loaded ===');
