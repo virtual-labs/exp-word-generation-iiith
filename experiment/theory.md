@@ -83,12 +83,13 @@ For these words:
 - For plural forms, only a suffix is **added** (e.g., "एं" for plural direct, "ओं" for plural oblique).
 
 **Example: "किताब" (kitaab - book)**
-| Number | Case | Delete | Add | Resulting Form |
-|----------|----------|--------|-------|---------------|
-| Singular | Direct | None | None | किताब |
-| Singular | Oblique | None | None | किताब |
-| Plural | Direct | None | एं | किताबें |
-| Plural | Oblique | None | ओं | किताबों |
+
+| Number   | Case    | Delete | Add  | Resulting Form |
+| -------- | ------- | ------ | ---- | -------------- |
+| Singular | Direct  | None   | None | किताब          |
+| Singular | Oblique | None   | None | किताब          |
+| Plural   | Direct  | None   | एं   | किताबें        |
+| Plural   | Oblique | None   | ओं   | किताबों        |
 
 **Explanation:**  
 For words like "किताब", "पुस्तक", "घर", "दूध", "मकान", "औरत", etc., the Add-Delete table will have "None" in the Delete column for all forms, and "None" in the Add column for singular forms. Only the plural forms require an addition in the Add column.
@@ -103,12 +104,13 @@ For these words:
 - The Add-Delete table will have "None" in both Delete and Add columns for all forms.
 
 **Example: "पानी" (pani - water)**
-| Number | Case | Delete | Add | Resulting Form |
-|----------|----------|--------|-------|---------------|
-| Singular | Direct | None | None | पानी |
-| Singular | Oblique | None | None | पानी |
-| Plural | Direct | None | None | पानी |
-| Plural | Oblique | None | None | पानी |
+
+| Number   | Case    | Delete | Add  | Resulting Form |
+| -------- | ------- | ------ | ---- | -------------- |
+| Singular | Direct  | None   | None | पानी           |
+| Singular | Oblique | None   | None | पानी           |
+| Plural   | Direct  | None   | None | पानी           |
+| Plural   | Oblique | None   | None | पानी           |
 
 **Explanation:**  
 For uncountable nouns like "पानी", "दूध", "चाय", "खाना", etc., the word remains unchanged in all forms, and the Add-Delete table will have "None" for both Delete and Add columns.

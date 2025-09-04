@@ -145,25 +145,3 @@ Identify and correct the following word generation errors:
 
 1. **English**: "I plays football" → Should be "I play football"
 2. **Hindi**: "लड़का खेलता" (referring to a girl) → Should be "लड़की खेलती"
-
----
-
-#### **Submission Guidelines**
-
-1. **Complete all assignments** with detailed explanations
-2. **Show your work** - explain the generation process step by step
-3. **Use proper terminology** from the theory section
-4. **Include examples** from both English and Hindi
-5. **Submit by**: [Insert due date]
-
-**Total Points**: 100
-
-- Assignment 1: 25 points
-- Assignment 2: 20 points
-- Assignment 3: 20 points
-- Assignment 4: 20 points
-- Assignment 5: 15 points
-
----
-
-_This assignment will help you master the principles of word generation and apply them systematically across different languages and grammatical contexts._

@@ -645,6 +645,8 @@ function resetSimulation() {
   checkHeader.innerHTML = "";
   correctAnswer.innerHTML = "";
   correctAnswer.style.display = "none";
+  document.getElementById("supportiveExplanation").innerHTML = "";
+  document.getElementById("supportiveExplanation").style.display = "none";
 }
 
 // Utility functions
