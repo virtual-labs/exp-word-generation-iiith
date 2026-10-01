@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What is the main goal of morphological word generation?",
+      "answers": {
+        "a": "To analyze existing words into their parts",
+        "b": "To produce correct word forms from roots and features",
+        "c": "To translate words between different languages",
+        "d": "To find synonyms for given words"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. This describes morphological analysis, which breaks words down rather than building them up.",
+        "b": "Correct! Morphological generation aims to produce correct word forms by combining roots with grammatical features.",
+        "c": "Incorrect. Translation involves converting meaning between languages, not morphological generation.",
+        "d": "Incorrect. Finding synonyms is a lexical task, not morphological generation."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In morphological generation, what does the root represent?",
+      "answers": {
+        "a": "The final generated word",
+        "b": "The base form before adding grammatical features",
+        "c": "The pronunciation of the word",
+        "d": "The meaning of the word"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. The root is the starting point, not the final result.",
+        "b": "Correct! The root is the base form of a word before any grammatical modifications are applied.",
+        "c": "Incorrect. The root represents the lexical base, not pronunciation information.",
+        "d": "Incorrect. While related to meaning, the root is the structural base for generation."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of these is an example of a morphological feature?",
+      "answers": {
+        "a": "Word length",
+        "b": "Tense (past, present, future)",
+        "c": "Alphabetical order",
+        "d": "Word frequency"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Word length is a physical property, not a grammatical feature.",
+        "b": "Correct! Tense is a key morphological feature that determines how verbs are inflected.",
+        "c": "Incorrect. Alphabetical order is about arrangement, not grammatical properties.",
+        "d": "Incorrect. Word frequency is a statistical measure, not a morphological feature."
+      },
+      "difficulty": "beginner"
+    },
+    {
+      "question": "When generating the past tense of 'run', what demonstrates the complexity of English morphology?",
+      "answers": {
+        "a": "run → runned (regular pattern)",
+        "b": "run → ran (irregular pattern)",
+        "c": "run → running (progressive form)",
+        "d": "run → runs (present tense)"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. 'runned' would be the regular pattern, but 'run' is irregular.",
+        "b": "Correct! 'run' → 'ran' shows irregular morphology that generation systems must handle as exceptions.",
+        "c": "Incorrect. 'running' is progressive, not past tense.",
+        "d": "Incorrect. 'runs' is present tense third person, not past tense."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "How do morphological features interact in Hindi word generation?",
+      "answers": {
+        "a": "Features work completely independently",
+        "b": "Only one feature can be applied at a time",
+        "c": "Features like gender, number, and case influence each other",
+        "d": "Features are randomly combined"
+      },
+      "correctAnswer": "c",
+      "explanations": {
+        "a": "Incorrect. Features often interact and influence each other in complex ways.",
+        "b": "Incorrect. Multiple features are typically applied simultaneously.",
+        "c": "Correct! In Hindi, features interact - gender affects number forms, case affects endings, etc.",
+        "d": "Incorrect. Feature combination follows systematic grammatical rules."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What makes morphological generation different from morphological analysis?",
+      "answers": {
+        "a": "They use completely different algorithms",
+        "b": "Generation builds words while analysis breaks them down",
+        "c": "Generation is easier than analysis",
+        "d": "They work with different languages"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. They may use similar underlying linguistic knowledge but in reverse.",
+        "b": "Correct! Generation combines roots and features to build words, while analysis decomposes words into features.",
+        "c": "Incorrect. Neither is inherently easier; they present different challenges.",
+        "d": "Incorrect. Both can work with the same languages."
+      },
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What computational advantage does deterministic morphological generation provide?",
+      "answers": {
+        "a": "It uses less disk space",
+        "b": "It guarantees the same output for the same input",
+        "c": "It processes words faster",
+        "d": "It requires fewer programming languages"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Disk space usage is not the primary advantage of determinism.",
+        "b": "Correct! Deterministic generation ensures reproducible results, which is crucial for reliable language processing.",
+        "c": "Incorrect. Speed is not necessarily related to determinism.",
+        "d": "Incorrect. Programming language choice is unrelated to determinism."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Why might morphological generation systems need to handle ambiguous feature specifications?",
+      "answers": {
+        "a": "To make the system more challenging for users",
+        "b": "Because natural language input may be underspecified",
+        "c": "To reduce system performance",
+        "d": "Ambiguity is never a real issue"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Handling ambiguity is about practical language processing, not user challenge.",
+        "b": "Correct! Real-world input may not specify all features, requiring systems to make reasonable defaults or handle multiple possibilities.",
+        "c": "Incorrect. Proper ambiguity handling improves system utility, not reduces performance.",
+        "d": "Incorrect. Ambiguity is a common challenge in natural language processing."
+      },
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What is the most significant challenge in building multilingual morphological generation systems?",
+      "answers": {
+        "a": "All languages use the same features",
+        "b": "Each language has unique morphological patterns and feature sets",
+        "c": "Multilingual systems are impossible to build",
+        "d": "Only vocabulary translation is needed"
+      },
+      "correctAnswer": "b",
+      "explanations": {
+        "a": "Incorrect. Languages have very different morphological systems and features.",
+        "b": "Correct! Each language has unique morphological patterns - some have rich case systems, others have complex verb conjugations, etc.",
+        "c": "Incorrect. Multilingual systems are challenging but definitely possible.",
+        "d": "Incorrect. Morphological differences are as important as vocabulary differences."
+      },
+      "difficulty": "advanced"
+    }
+  ]
+}

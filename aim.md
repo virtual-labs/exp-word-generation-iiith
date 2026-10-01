@@ -1,0 +1,3 @@
+**To understand and practice morphological generation of words through interactive exploration of linguistic features across different languages.**
+
+This experiment aims to help students develop proficiency in identifying and combining morphological components to generate words, including roots, affixes, and grammatical features such as gender, number, person, case, and tense. Through hands-on interaction with words from English and Hindi, students will learn to construct complex word forms from their constituent parts and understand how morphological features combine to create meaningful words across languages.
