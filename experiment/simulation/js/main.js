@@ -1,13 +1,13 @@
 // Google Analytics
 (function (i, s, o, g, r, a, m) {
   i["GoogleAnalyticsObject"] = r;
-  (i[r] =
+  ((i[r] =
     i[r] ||
     function () {
       (i[r].q = i[r].q || []).push(arguments);
     }),
-    (i[r].l = 1 * new Date());
-  (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+    (i[r].l = 1 * new Date()));
+  ((a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]));
   a.async = 1;
   a.src = g;
   m.parentNode.insertBefore(a, m);
@@ -28,6 +28,36 @@ class MorphologyAnalyzer {
     this.isInitialized = false;
   }
 
+  normalizeText(value) {
+    if (value === null || value === undefined) return "";
+    return String(value).trim().normalize("NFC");
+  }
+
+  toJoinableSuffix(suffix) {
+    if (!suffix) return "";
+
+    const normalized = this.normalizeText(suffix);
+    const firstChar = normalized.charAt(0);
+    const rest = normalized.slice(1);
+    const vowelToMatra = {
+      आ: "ा",
+      इ: "ि",
+      ई: "ी",
+      उ: "ु",
+      ऊ: "ू",
+      ए: "े",
+      ऐ: "ै",
+      ओ: "ो",
+      औ: "ौ",
+    };
+
+    if (vowelToMatra[firstChar]) {
+      return vowelToMatra[firstChar] + rest;
+    }
+
+    return normalized;
+  }
+
   // Load data from text files (replacing PHP file reading)
   async loadData() {
     try {
@@ -37,7 +67,7 @@ class MorphologyAnalyzer {
       const optionsResponse = await fetch("Exp3/options.txt");
       if (!optionsResponse.ok) {
         throw new Error(
-          `Failed to load options.txt: ${optionsResponse.status}`
+          `Failed to load options.txt: ${optionsResponse.status}`,
         );
       }
       const optionsText = await optionsResponse.text();
@@ -48,7 +78,7 @@ class MorphologyAnalyzer {
       const paradigmResponse = await fetch("Exp3/paradigm.txt");
       if (!paradigmResponse.ok) {
         throw new Error(
-          `Failed to load paradigm.txt: ${paradigmResponse.status}`
+          `Failed to load paradigm.txt: ${paradigmResponse.status}`,
         );
       }
       const paradigmText = await paradigmResponse.text();
@@ -59,7 +89,7 @@ class MorphologyAnalyzer {
       const answersResponse = await fetch("Exp3/answers_opt.txt");
       if (!answersResponse.ok) {
         throw new Error(
-          `Failed to load answers_opt.txt: ${answersResponse.status}`
+          `Failed to load answers_opt.txt: ${answersResponse.status}`,
         );
       }
       const answersText = await answersResponse.text();
@@ -87,7 +117,7 @@ class MorphologyAnalyzer {
       const parts = line.trim().split(/\s+/);
       if (parts.length >= 2) {
         const paradigmId = parts[0];
-        const word = parts[1];
+        const word = this.normalizeText(parts[1]);
         this.rootWords.set(word, paradigmId);
         //console.log(`Added root word: ${word} -> paradigm ${paradigmId}`);
       }
@@ -105,8 +135,8 @@ class MorphologyAnalyzer {
 
       if (parts.length >= 10) {
         const paradigmId = parts[0];
-        const rootWord = parts[1];
-        const tokens = parts.slice(2, 10).map((t) => t.trim());
+        const rootWord = this.normalizeText(parts[1]);
+        const tokens = parts.slice(2, 10).map((t) => this.normalizeText(t));
         // Convert "None" to empty string for internal logic
         const deletes = tokens.slice(0, 4).map((x) => (x === "None" ? "" : x));
         const adds = tokens.slice(4, 8).map((x) => (x === "None" ? "" : x));
@@ -118,7 +148,7 @@ class MorphologyAnalyzer {
       } else {
         console.warn(
           `Line ${lineIndex + 1} has insufficient parts (${parts.length}):`,
-          parts
+          parts,
         );
       }
     });
@@ -130,7 +160,7 @@ class MorphologyAnalyzer {
     this.answerOptions = text
       .trim()
       .split("\n")
-      .map((opt) => opt.trim())
+      .map((opt) => this.normalizeText(opt))
       .filter((opt) => opt.length > 0 && opt !== "None");
     //console.log('Answer options parsed:', this.answerOptions.length, 'options');
     //console.log('First 10 options:', this.answerOptions.slice(0, 10));
@@ -144,7 +174,8 @@ class MorphologyAnalyzer {
 
   // Get paradigm for selected root
   getParadigm(rootWord) {
-    const paradigmId = this.rootWords.get(rootWord);
+    const normalizedRoot = this.normalizeText(rootWord);
+    const paradigmId = this.rootWords.get(normalizedRoot);
     //console.log(`Getting paradigm for ${rootWord}: paradigm ID ${paradigmId}`);
 
     if (paradigmId) {
@@ -174,7 +205,7 @@ class MorphologyAnalyzer {
       word: this.applyDeleteAdd(
         rootWord,
         deletes[form.index],
-        adds[form.index]
+        adds[form.index],
       ),
       root: rootWord,
       number: form.number,
@@ -185,21 +216,38 @@ class MorphologyAnalyzer {
 
   // Apply delete + add to form the target word
   applyDeleteAdd(root, delSuffix, addSuffix) {
-    //console.log(`Generating word form: root="${root}", delete="${delSuffix}", add="${addSuffix}"`);
-    let base = root;
+    const normalizedRoot = this.normalizeText(root);
+    const normalizedDelSuffix = this.normalizeText(delSuffix);
+    const normalizedAddSuffix = this.normalizeText(addSuffix);
+    const joinableDelSuffix = this.toJoinableSuffix(normalizedDelSuffix);
+
+    //console.log(`Generating word form: root="${normalizedRoot}", delete="${normalizedDelSuffix}", add="${normalizedAddSuffix}"`);
+    let base = normalizedRoot;
     // If delete suffix is specified and exists at the end of the root
-    if (delSuffix && root.endsWith(delSuffix)) {
-      base = root.slice(0, root.length - delSuffix.length);
+    if (joinableDelSuffix && normalizedRoot.endsWith(joinableDelSuffix)) {
+      base = normalizedRoot.slice(
+        0,
+        normalizedRoot.length - joinableDelSuffix.length,
+      );
       //console.log(`Deleted suffix "${delSuffix}": "${root}" -> "${base}"`);
-    } else if (delSuffix) {
+    } else if (
+      normalizedDelSuffix &&
+      normalizedRoot.endsWith(normalizedDelSuffix)
+    ) {
+      // Fallback for non-vowel tokens that should be deleted literally.
+      base = normalizedRoot.slice(
+        0,
+        normalizedRoot.length - normalizedDelSuffix.length,
+      );
+    } else if (normalizedDelSuffix) {
       console.log(
-        `Delete suffix "${delSuffix}" not found at end of "${root}". Leaving root unchanged.`
+        `Delete suffix "${normalizedDelSuffix}" not found at end of "${normalizedRoot}". Leaving root unchanged.`,
       );
     }
 
     // If add suffix is specified, append it
-    if (addSuffix) {
-      const result = base + addSuffix;
+    if (normalizedAddSuffix) {
+      const result = base + this.toJoinableSuffix(normalizedAddSuffix);
       //console.log(`Added suffix "${addSuffix}": "${base}" -> "${result}"`);
       return result;
     }
@@ -227,18 +275,46 @@ class MorphologyAnalyzer {
 
   // Check user answers
   checkAnswers(userAnswers) {
-    const results = [];
+    const deleteResults = [];
+    const addResults = [];
     const correct = this.correctAnswers;
 
     //console.log('Checking answers:', userAnswers);
     //console.log('Correct answers:', correct);
 
-    for (let i = 0; i < 8; i++) {
-      const user = userAnswers[i] === "None" ? "" : userAnswers[i];
-      const corr = correct[i] === "None" ? "" : correct[i];
-      results.push(user === corr);
+    for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
+      const userDel = this.normalizeText(
+        userAnswers[rowIndex] === "None" ? "" : userAnswers[rowIndex],
+      );
+      const userAdd = this.normalizeText(
+        userAnswers[rowIndex + 4] === "None" ? "" : userAnswers[rowIndex + 4],
+      );
+      const corrDel = this.normalizeText(
+        correct[rowIndex] === "None" ? "" : correct[rowIndex],
+      );
+      const corrAdd = this.normalizeText(
+        correct[rowIndex + 4] === "None" ? "" : correct[rowIndex + 4],
+      );
+
+      // Accept alternate delete/add pairs when they create the same valid form.
+      const expectedWord = this.applyDeleteAdd(
+        this.currentRoot,
+        corrDel,
+        corrAdd,
+      );
+      const userWord = this.applyDeleteAdd(this.currentRoot, userDel, userAdd);
+      const surfaceFormMatches = expectedWord === userWord;
+
+      const deleteMatches = userDel === corrDel;
+      const addMatches = userAdd === corrAdd;
+
+      deleteResults.push(deleteMatches || surfaceFormMatches);
+      addResults.push(addMatches || surfaceFormMatches);
     }
-    return results;
+
+    // Keep the legacy order expected by updateCheckResults:
+    // [4 delete checks, then 4 add checks].
+    return [...deleteResults, ...addResults];
   }
 }
 
@@ -317,7 +393,7 @@ function populateRootWordsDropdown() {
     console.error("Dropdown has no word options!");
     showFeedback(
       "No words available in dropdown. Please check data files.",
-      "error"
+      "error",
     );
   }
 }
@@ -500,7 +576,7 @@ function handleSubmit() {
   } else {
     showFeedback(
       '❌ Some transformations are incorrect. Review your answers or use "Get Answer" to see the correct transformations.',
-      "error"
+      "error",
     );
     getAnswerButton.style.display = "inline-flex";
     getAnswerButton.disabled = false;
