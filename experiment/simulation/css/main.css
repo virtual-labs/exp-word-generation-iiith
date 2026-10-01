@@ -22,9 +22,11 @@
   --color-neutral-900: #0f172a;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
-  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08),
+  --shadow-md:
+    0 4px 6px -1px rgba(67, 97, 238, 0.08),
     0 2px 4px -1px rgba(67, 97, 238, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
+  --shadow-lg:
+    0 10px 15px -3px rgba(67, 97, 238, 0.1),
     0 4px 6px -2px rgba(67, 97, 238, 0.05);
 
   /* Legacy variables for backward compatibility */
@@ -48,9 +50,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Noto Sans Devanagari", "Arial Unicode MS", Roboto, Oxygen, Ubuntu,
-    Cantarell, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Devanagari",
+    "Arial Unicode MS", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
   color: var(--color-neutral-800);
   background-color: var(--color-neutral-50);
@@ -112,7 +114,9 @@ body {
   padding: 0.7em 0;
   background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
   border-radius: 1.2em 1.2em 0 0;
-  transition: background 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(67, 97, 238, 0.04);
   border-bottom: 1px solid var(--color-neutral-200);
   margin: 0;
@@ -151,7 +155,9 @@ body {
   border: 1px solid var(--color-neutral-200);
   border-top: none;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
-  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  transition:
+    max-height 0.3s ease-out,
+    opacity 0.3s ease-out;
   max-height: 500px;
   opacity: 1;
   overflow: hidden;
@@ -1572,8 +1578,13 @@ body {
 .select-box,
 .form-select,
 .correct-answer-table td {
-  font-family: "Noto Sans Devanagari", "Arial Unicode MS", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    "Noto Sans Devanagari",
+    "Arial Unicode MS",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   font-size: 1rem;
   line-height: 1.5;
 }
@@ -1581,8 +1592,13 @@ body {
 /* Ensure proper rendering of Hindi text in dropdowns */
 .select-box option,
 .form-select option {
-  font-family: "Noto Sans Devanagari", "Arial Unicode MS", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    "Noto Sans Devanagari",
+    "Arial Unicode MS",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   padding: 0.3rem;
 }
 
@@ -1632,12 +1648,12 @@ body {
 }
 
 /* Form elements */
-label {
+.simulation-container label {
   font-weight: 500;
   margin-bottom: 5px;
 }
 
-select {
+.simulation-container select {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--border-color);
@@ -1646,12 +1662,12 @@ select {
   font-size: 14px;
 }
 
-select:disabled {
+.simulation-container select:disabled {
   background-color: var(--hover-color);
   cursor: not-allowed;
 }
 
-select:focus {
+.simulation-container select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
@@ -1664,7 +1680,7 @@ select:focus {
   gap: 10px;
 }
 
-button {
+.simulation-container button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -1673,26 +1689,26 @@ button {
   transition: background-color 0.2s;
 }
 
-button:disabled {
+.simulation-container button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-#check-button {
+.simulation-container #check-button {
   background-color: var(--primary-color);
   color: white;
 }
 
-#check-button:hover:not(:disabled) {
+.simulation-container #check-button:hover:not(:disabled) {
   background-color: #1976d2;
 }
 
-#find-answer-button {
+.simulation-container #find-answer-button {
   background-color: #757575;
   color: white;
 }
 
-#find-answer-button:hover:not(:disabled) {
+.simulation-container #find-answer-button:hover:not(:disabled) {
   background-color: #616161;
 }
 
@@ -1733,7 +1749,7 @@ button:disabled {
     flex-direction: column;
   }
 
-  button {
+  .simulation-container button {
     width: 100%;
   }
 }
@@ -1751,11 +1767,11 @@ button:disabled {
     padding: 0;
   }
 
-  button {
+  .simulation-container button {
     display: none;
   }
 
-  select {
+  .simulation-container select {
     border: 1px solid #999;
   }
 
@@ -1798,7 +1814,8 @@ button:disabled {
   max-height: 90vh;
   overflow-y: auto;
   text-align: center;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
