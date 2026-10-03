@@ -18,14 +18,137 @@ ga("send", "pageview");
 // Morphological Analysis Data Manager
 class MorphologyAnalyzer {
   constructor() {
-    this.rootWords = new Map();
-    this.paradigmData = new Map();
-    this.answerOptions = [];
+    this.languages = ["hi", "en"];
+    this.currentLanguage = "hi";
+    this.rootWordsByLanguage = {
+      hi: new Map(),
+      en: new Map(),
+    };
+    this.paradigmDataByLanguage = {
+      hi: new Map(),
+      en: new Map(),
+    };
+    this.answerOptionsByLanguage = {
+      hi: [],
+      en: [],
+    };
+    this.rootWords = this.rootWordsByLanguage.hi;
+    this.paradigmData = this.paradigmDataByLanguage.hi;
+    this.answerOptions = this.answerOptionsByLanguage.hi;
     this.currentRoot = null;
     this.currentParadigm = null;
     this.correctAnswers = [];
     this.userAnswers = [];
     this.isInitialized = false;
+  }
+
+  setLanguage(language) {
+    if (!this.languages.includes(language)) return;
+    this.currentLanguage = language;
+    this.rootWords = this.rootWordsByLanguage[language];
+    this.paradigmData = this.paradigmDataByLanguage[language];
+    this.answerOptions = [...this.answerOptionsByLanguage[language]];
+  }
+
+  getCommonPrefixLength(a, b) {
+    const first = this.normalizeText(a);
+    const second = this.normalizeText(b);
+    let idx = 0;
+    while (
+      idx < first.length &&
+      idx < second.length &&
+      first.charAt(idx) === second.charAt(idx)
+    ) {
+      idx++;
+    }
+    return idx;
+  }
+
+  deriveDeleteAdd(root, target) {
+    const normalizedRoot = this.normalizeText(root);
+    const normalizedTarget = this.normalizeText(target);
+    const prefixLength = this.getCommonPrefixLength(
+      normalizedRoot,
+      normalizedTarget,
+    );
+    return {
+      del: normalizedRoot.slice(prefixLength),
+      add: normalizedTarget.slice(prefixLength),
+    };
+  }
+
+  parseEnglishParadigmsFromFeatures(text) {
+    const lines = text.trim().split("\n");
+    const nounFormsByRoot = new Map();
+
+    lines.forEach((line) => {
+      const parts = line.split("\t").map((part) => this.normalizeText(part));
+      if (parts.length < 9) return;
+
+      const word = parts[0];
+      const root = parts[1];
+      const category = parts[2].toLowerCase();
+      const number = parts[4].toLowerCase();
+      const language = parts[7].toLowerCase();
+
+      if (language !== "en" || category !== "noun" || !root || !word) return;
+
+      if (!nounFormsByRoot.has(root)) {
+        nounFormsByRoot.set(root, {
+          singular: new Set(),
+          plural: new Set(),
+        });
+      }
+
+      const entry = nounFormsByRoot.get(root);
+      if (number === "singular") entry.singular.add(word);
+      if (number === "plural") entry.plural.add(word);
+    });
+
+    const englishRoots = Array.from(nounFormsByRoot.keys()).sort((a, b) =>
+      a.localeCompare(b),
+    );
+    const englishOptions = new Set();
+
+    englishRoots.forEach((rootWord, index) => {
+      const forms = nounFormsByRoot.get(rootWord);
+      const singularCandidates = Array.from(forms.singular);
+      const pluralCandidates = Array.from(forms.plural);
+
+      const singular = singularCandidates.includes(rootWord)
+        ? rootWord
+        : singularCandidates[0] || rootWord;
+      const plural =
+        pluralCandidates.find((candidate) => candidate !== singular) ||
+        pluralCandidates[0] ||
+        singular;
+
+      const targets = [singular, singular, plural, plural];
+      const transforms = targets.map((target) =>
+        this.deriveDeleteAdd(rootWord, target),
+      );
+      const deletes = transforms.map((item) => item.del);
+      const adds = transforms.map((item) => item.add);
+
+      deletes.forEach((item) => {
+        if (item) englishOptions.add(item);
+      });
+      adds.forEach((item) => {
+        if (item) englishOptions.add(item);
+      });
+
+      const paradigmId = `en_${index + 1}`;
+      this.rootWordsByLanguage.en.set(rootWord, paradigmId);
+      this.paradigmDataByLanguage.en.set(paradigmId, {
+        root: rootWord,
+        transformations: { deletes, adds },
+      });
+    });
+
+    this.answerOptionsByLanguage.en = [
+      "None",
+      ...Array.from(englishOptions).sort((a, b) => a.localeCompare(b)),
+    ];
   }
 
   normalizeText(value) {
@@ -72,7 +195,7 @@ class MorphologyAnalyzer {
       }
       const optionsText = await optionsResponse.text();
       //console.log('Options text loaded, first 200 chars:', optionsText.substring(0, 200));
-      this.parseOptions(optionsText);
+      this.parseOptions(optionsText, "hi");
 
       // Load paradigm data
       const paradigmResponse = await fetch("Exp3/paradigm.txt");
@@ -83,7 +206,7 @@ class MorphologyAnalyzer {
       }
       const paradigmText = await paradigmResponse.text();
       //console.log('Paradigm text loaded, first 200 chars:', paradigmText.substring(0, 200));
-      this.parseParadigm(paradigmText);
+      this.parseParadigm(paradigmText, "hi");
 
       // Load answer options
       const answersResponse = await fetch("Exp3/answers_opt.txt");
@@ -94,7 +217,20 @@ class MorphologyAnalyzer {
       }
       const answersText = await answersResponse.text();
       //console.log('Answers text loaded, first 200 chars:', answersText.substring(0, 200));
-      this.parseAnswerOptions(answersText);
+      this.parseAnswerOptions(answersText, "hi");
+
+      // Load language-agnostic features to build English noun paradigms
+      const featuresResponse = await fetch("features.txt");
+      if (!featuresResponse.ok) {
+        throw new Error(
+          `Failed to load features.txt: ${featuresResponse.status}`,
+        );
+      }
+      const featuresText = await featuresResponse.text();
+      this.parseEnglishParadigmsFromFeatures(featuresText);
+
+      // Default language is Hindi on first load.
+      this.setLanguage("hi");
 
       this.isInitialized = true;
       //console.log('Data loaded successfully');
@@ -109,8 +245,9 @@ class MorphologyAnalyzer {
   }
 
   // Parse options.txt file
-  parseOptions(text) {
+  parseOptions(text, language = "hi") {
     const lines = text.trim().split("\n");
+    const targetRootWords = this.rootWordsByLanguage[language];
     //console.log('Parsing options:', lines);
 
     lines.forEach((line) => {
@@ -118,15 +255,16 @@ class MorphologyAnalyzer {
       if (parts.length >= 2) {
         const paradigmId = parts[0];
         const word = this.normalizeText(parts[1]);
-        this.rootWords.set(word, paradigmId);
+        targetRootWords.set(word, paradigmId);
         //console.log(`Added root word: ${word} -> paradigm ${paradigmId}`);
       }
     });
   }
 
   // Parse paradigm.txt file
-  parseParadigm(text) {
+  parseParadigm(text, language = "hi") {
     const lines = text.trim().split("\n");
+    const targetParadigmData = this.paradigmDataByLanguage[language];
     //console.log('Parsing paradigm lines:', lines.length);
 
     lines.forEach((line, lineIndex) => {
@@ -140,7 +278,7 @@ class MorphologyAnalyzer {
         // Convert "None" to empty string for internal logic
         const deletes = tokens.slice(0, 4).map((x) => (x === "None" ? "" : x));
         const adds = tokens.slice(4, 8).map((x) => (x === "None" ? "" : x));
-        this.paradigmData.set(paradigmId, {
+        targetParadigmData.set(paradigmId, {
           root: rootWord,
           transformations: { deletes, adds },
         });
@@ -155,16 +293,16 @@ class MorphologyAnalyzer {
   }
 
   // Parse answers_opt.txt file
-  parseAnswerOptions(text) {
+  parseAnswerOptions(text, language = "hi") {
     // Split by newlines and filter out empty lines, trim each option
-    this.answerOptions = text
+    const options = text
       .trim()
       .split("\n")
       .map((opt) => this.normalizeText(opt))
       .filter((opt) => opt.length > 0 && opt !== "None");
     //console.log('Answer options parsed:', this.answerOptions.length, 'options');
     //console.log('First 10 options:', this.answerOptions.slice(0, 10));
-    this.answerOptions.unshift("None");
+    this.answerOptionsByLanguage[language] = ["None", ...options];
   }
 
   // Get root words for dropdown
@@ -319,6 +457,7 @@ class MorphologyAnalyzer {
 }
 
 // DOM Elements
+const languageSelection = document.getElementById("languageSelection");
 const rootSelection = document.getElementById("rootSelection");
 const paradigmSection = document.getElementById("paradigmSection");
 const paradigmTable = document.getElementById("paradigmTable");
@@ -353,6 +492,9 @@ async function initializeApp() {
       return;
     }
 
+    if (languageSelection) {
+      languageSelection.value = analyzer.currentLanguage;
+    }
     populateRootWordsDropdown();
     setupEventListeners();
     setupInstructionsPanel();
@@ -362,6 +504,28 @@ async function initializeApp() {
     console.error("Error during initialization:", error);
     showFeedback("Error initializing application: " + error.message, "error");
   }
+}
+
+function handleLanguageSelection() {
+  const selectedLanguage = languageSelection ? languageSelection.value : "hi";
+  analyzer.setLanguage(selectedLanguage);
+
+  // Reset state when language changes.
+  rootSelection.selectedIndex = 0;
+  hideParadigmSection();
+  hideAddDeleteSection();
+  clearFeedback();
+  clearResults();
+  analyzer.currentRoot = null;
+  analyzer.currentParadigm = null;
+  analyzer.correctAnswers = [];
+  analyzer.userAnswers = [];
+  submitButton.disabled = true;
+  getAnswerButton.style.display = "none";
+  document.getElementById("supportiveExplanation").innerHTML = "";
+  document.getElementById("supportiveExplanation").style.display = "none";
+
+  populateRootWordsDropdown();
 }
 
 // Populate root words dropdown
@@ -431,6 +595,10 @@ function handleRootSelection() {
 
 // Show paradigm table (modified: do not show answers, show placeholders and instructional message)
 function showParadigmTable(rootWord) {
+  const caseDirectLabel = analyzer.currentLanguage === "en" ? "N/A" : "direct";
+  const caseObliqueLabel =
+    analyzer.currentLanguage === "en" ? "N/A" : "oblique";
+
   // Optional instructional message above the table
   paradigmTable.innerHTML = `
       <table class="paradigm-display-table">
@@ -447,25 +615,25 @@ function showParadigmTable(rootWord) {
             <td>?</td>
             <td>${rootWord}</td>
             <td>singular</td>
-            <td>direct</td>
+            <td>${caseDirectLabel}</td>
           </tr>
           <tr>
             <td>?</td>
             <td>${rootWord}</td>
             <td>singular</td>
-            <td>oblique</td>
+            <td>${caseObliqueLabel}</td>
           </tr>
           <tr>
             <td>?</td>
             <td>${rootWord}</td>
             <td>plural</td>
-            <td>direct</td>
+            <td>${caseDirectLabel}</td>
           </tr>
           <tr>
             <td>?</td>
             <td>${rootWord}</td>
             <td>plural</td>
-            <td>oblique</td>
+            <td>${caseObliqueLabel}</td>
           </tr>
         </tbody>
       </table>
@@ -475,30 +643,33 @@ function showParadigmTable(rootWord) {
 
 // Show add-delete table
 function showAddDeleteTable() {
+  const directLabel = analyzer.currentLanguage === "en" ? "N/A" : "Direct";
+  const obliqueLabel = analyzer.currentLanguage === "en" ? "N/A" : "Oblique";
+
   const categories = [
     {
       number: "sing",
       case: "dr",
       fullNumber: "Singular",
-      fullCase: "Direct",
+      fullCase: directLabel,
     },
     {
       number: "sing",
       case: "ob",
       fullNumber: "Singular",
-      fullCase: "Oblique",
+      fullCase: obliqueLabel,
     },
     {
       number: "plu",
       case: "dr",
       fullNumber: "Plural",
-      fullCase: "Direct",
+      fullCase: directLabel,
     },
     {
       number: "plu",
       case: "ob",
       fullNumber: "Plural",
-      fullCase: "Oblique",
+      fullCase: obliqueLabel,
     },
   ];
   // Always show "None" as the first option
@@ -644,11 +815,14 @@ function showCorrectAnswers() {
             <tbody>
     `;
 
+  const directLabel = analyzer.currentLanguage === "en" ? "N/A" : "Direct";
+  const obliqueLabel = analyzer.currentLanguage === "en" ? "N/A" : "Oblique";
+
   const categories = [
-    { number: "Singular", case: "Direct" },
-    { number: "Singular", case: "Oblique" },
-    { number: "Plural", case: "Direct" },
-    { number: "Plural", case: "Oblique" },
+    { number: "Singular", case: directLabel },
+    { number: "Singular", case: obliqueLabel },
+    { number: "Plural", case: directLabel },
+    { number: "Plural", case: obliqueLabel },
   ];
   categories.forEach((cat, index) => {
     answerHTML += `
@@ -680,6 +854,17 @@ function showSupportiveExplanation(rootWord, correctAnswers) {
   const explanationDiv = document.getElementById("supportiveExplanation");
   let explanation = "";
 
+  if (analyzer.currentLanguage === "en") {
+    explanation = `
+      <div style="margin-top:1em; background:#f8f9fa; border-left:4px solid #4361ee; padding:0.8em 1em; border-radius:0.5em;">
+        <b>Explanation:</b> For English nouns in this simulation, Number is modeled directly while Case is shown as N/A. Singular rows use singular noun forms and plural rows use plural noun forms.
+      </div>
+    `;
+    explanationDiv.innerHTML = explanation;
+    explanationDiv.style.display = "block";
+    return;
+  }
+
   // If all deletes and adds are "None" or empty (invariable/uncountable/loanwords)
   if (
     correctAnswers.slice(0, 4).every((del) => !del || del === "None") &&
@@ -707,6 +892,9 @@ function showSupportiveExplanation(rootWord, correctAnswers) {
 
 // Reset the simulation
 function resetSimulation() {
+  if (languageSelection) {
+    languageSelection.value = analyzer.currentLanguage;
+  }
   rootSelection.selectedIndex = 0;
   hideParadigmSection();
   hideAddDeleteSection();
@@ -759,6 +947,9 @@ function showFeedback(message, type) {
 
 // Setup event listeners
 function setupEventListeners() {
+  if (languageSelection) {
+    languageSelection.addEventListener("change", handleLanguageSelection);
+  }
   rootSelection.addEventListener("change", handleRootSelection);
   submitButton.addEventListener("click", handleSubmit);
   getAnswerButton.addEventListener("click", showCorrectAnswers);
